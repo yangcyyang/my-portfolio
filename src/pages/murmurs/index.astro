@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+const allMurmurs = await getCollection('murmurs');
+const murmurs = allMurmurs.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+// Pre-render all murmur content
+const renderedMurmurs = await Promise.all(
+  murmurs.map(async (murmur) => {
+    const { Content } = await render(murmur);
+    return { murmur, Content };
+  })
+);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<BaseLayout
+  title="碎碎念 — cy"
+  description="随手记录的想法、发现和感受。比朋友圈多点空间，比博客少点压力。"
+>
+  <div class="mx-auto max-w-5xl px-6 py-14">
+
+    <!-- Page Header -->
+    <div class="mb-12">
+      <p class="mb-2 text-sm font-medium uppercase tracking-widest text-violet-400">
+        Murmurs
+      </p>
+      <h1 class="mb-3 text-3xl font-bold text-slate-100">碎碎念</h1>
+      <p class="text-slate-400">
+        随手记录的想法、发现和感受。比朋友圈多点空间，比博客少点压力。
+      </p>
+    </div>
+
+    <!-- Timeline -->
+    <div class="mx-auto max-w-2xl space-y-6">
+      {renderedMurmurs.map(({ murmur, Content }) => (
+        <article class="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 transition-colors hover:border-slate-700">
+          <!-- Card Header: mood + date + tags -->
+          <div class="mb-4 flex flex-wrap items-center gap-2">
+            {murmur.data.mood && (
+              <span class="text-xl leading-none">{murmur.data.mood}</span>
+            )}
+            <time
+              datetime={murmur.data.pubDate.toISOString()}
+              class="text-xs text-slate-500"
+            >
+              {formatDate(murmur.data.pubDate)}
+            </time>
+            {murmur.data.tags.map((tag) => (
+              <span class="rounded-full bg-slate-800 px-2 py-0.5 text-xs text-slate-400">
+                #{tag}
+              </span>
+            ))}
+          </div>
+
+          <!-- Content -->
+          <div class="murmur-content text-sm leading-relaxed text-slate-300">
+            <Content />
+          </div>
+        </article>
+      ))}
+
+      {murmurs.length === 0 && (
+        <div class="py-20 text-center text-slate-500">
+          <p class="text-4xl mb-4">💭</p>
+          <p>还没有碎碎念，快来写第一条吧。</p>
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Murmur content typography — lighter than .prose-article */
+  .murmur-content :global(p) {
+    margin-bottom: 0.75rem;
+    color: rgb(203 213 225); /* slate-300 */
+  }
+  .murmur-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .murmur-content :global(strong) {
+    color: rgb(226 232 240); /* slate-100 */
+    font-weight: 600;
+  }
+  .murmur-content :global(a) {
+    color: rgb(167 139 250); /* violet-400 */
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .murmur-content :global(a:hover) {
+    color: rgb(196 181 253); /* violet-300 */
+  }
+  .murmur-content :global(code) {
+    background-color: rgb(30 41 59); /* slate-800 */
+    color: rgb(196 181 253); /* violet-300 */
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.85em;
+  }
+</style>

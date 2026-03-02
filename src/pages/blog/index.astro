@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+// Collect all unique tags
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout title="博客 — cy" description="关于游戏数值、AI 创业与个人成长的思考与笔记">
+  <!-- Page Header -->
+  <section class="border-b border-slate-800/50">
+    <div class="mx-auto max-w-5xl px-6 py-14">
+      <p class="mb-2 text-sm font-medium uppercase tracking-widest text-violet-400">Blog</p>
+      <h1 class="mb-3 text-3xl font-bold text-slate-100 md:text-4xl">博客</h1>
+      <p class="max-w-xl text-slate-400">
+        记录关于游戏数值设计、AI Agent 实践、创业思考与日常技术探索的心得。
+      </p>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-5xl px-6 py-12">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">
+
+      <!-- Main: Post List -->
+      <main class="lg:col-span-3">
+        <div class="space-y-6">
+          {posts.map((post) => {
+            const slug = post.id.replace(/\.md$/, '');
+            return (
+              <article class="group rounded-xl border border-slate-800 bg-slate-900/30 p-6 transition-all hover:border-slate-700 hover:bg-slate-900/60">
+                <!-- Meta -->
+                <div class="mb-3 flex flex-wrap items-center gap-3">
+                  <time
+                    datetime={post.data.pubDate.toISOString()}
+                    class="text-sm text-slate-500"
+                  >
+                    {formatDate(post.data.pubDate)}
+                  </time>
+                  <span class="text-slate-700">·</span>
+                  <div class="flex flex-wrap gap-1.5">
+                    {post.data.tags.map((tag) => (
+                      <span class="rounded-full bg-slate-800 px-2 py-0.5 text-xs text-slate-400">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Title -->
+                <h2 class="mb-2 text-xl font-bold text-slate-100 group-hover:text-violet-300 transition-colors">
+                  <a href={`/blog/${slug}`} class="relative after:absolute after:inset-0">
+                    {post.data.title}
+                  </a>
+                </h2>
+
+                <!-- Description -->
+                <p class="text-sm text-slate-400 leading-relaxed">
+                  {post.data.description}
+                </p>
+
+                <!-- Read more -->
+                <div class="mt-4 text-sm font-medium text-violet-400 group-hover:text-violet-300 transition-colors">
+                  阅读全文 →
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </main>
+
+      <!-- Sidebar: Tags -->
+      <aside class="lg:col-span-1">
+        <div class="sticky top-24">
+          <h3 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            标签
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {allTags.map((tag) => (
+              <span class="cursor-default rounded-full border border-slate-800 px-3 py-1 text-sm text-slate-400 transition-colors hover:border-violet-500 hover:text-violet-400">
+                #{tag}
+              </span>
+            ))}
+          </div>
+
+          <div class="mt-8 rounded-xl border border-dashed border-slate-700 p-4 text-center">
+            <p class="mb-1 text-xs text-slate-500 uppercase tracking-wider">文章总数</p>
+            <p class="text-3xl font-bold text-violet-400">{posts.length}</p>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>

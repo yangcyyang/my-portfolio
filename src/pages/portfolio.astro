@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const categories = ['全部', '游戏数值策划', 'AI Agent 部署实践'];
+
+const projects = [
+  {
+    id: 1,
+    title: '卡牌对战游戏数值架构设计',
+    category: '游戏数值策划',
+    description:
+      '为一款 CCG 游戏设计完整的数值体系，涵盖卡牌强度量化模型、资源经济平衡、赛季 Meta 监控指标。核心目标：让不同定位的卡牌在统计层面保持博弈多样性。',
+    tags: ['数值设计', 'Excel', '经济模型'],
+    status: '已完成',
+    highlights: ['建立 300+ 卡牌的强度评分体系', '胜率方差控制在 ±3% 以内', '设计可量化的 Meta 健康度指标'],
+  },
+  {
+    id: 2,
+    title: 'RPG 战斗系统数值平衡研究',
+    category: '游戏数值策划',
+    description:
+      '从零搭建一套 RPG 战斗数值框架，包括属性成长曲线、技能伤害公式、Boss 难度缩放算法。使用 Python 模拟 10 万次战斗验证数值合理性。',
+    tags: ['战斗系统', 'Python', '数据分析'],
+    status: '已完成',
+    highlights: ['属性成长曲线误差率 < 5%', '模拟验证覆盖全职业组合', '提供可视化数值热力图'],
+  },
+  {
+    id: 3,
+    title: 'OpenClaw — 多工具 AI Agent 系统',
+    category: 'AI Agent 部署实践',
+    description:
+      'OpenClaw 是一个自主搭建的 AI Agent 编排系统，集成文件操作、网络搜索、代码执行等工具，通过 Claude API 驱动多步骤任务的自动化完成。',
+    tags: ['Claude API', 'Python', 'Agent'],
+    status: '进行中',
+    highlights: ['支持 10+ 工具的动态调用', '实现 ReAct 推理-行动循环', '处理成本低于同类方案 40%'],
+  },
+  {
+    id: 4,
+    title: 'LLM 工作流成本优化实践',
+    category: 'AI Agent 部署实践',
+    description:
+      '针对生产环境中 LLM API 的调用成本问题，系统性地研究 Prompt Caching、模型路由、输出压缩等优化策略，整理为可复用的工程方案。',
+    tags: ['成本优化', 'Prompt Engineering', 'Claude'],
+    status: '已完成',
+    highlights: ['Token 消耗降低 55%', '延迟减少 30%（缓存命中场景）', '整理为开源方案文档'],
+  },
+];
+---
+
+<BaseLayout title="作品集 — cy" description="游戏数值策划与 AI Agent 部署实践的项目案例集">
+  <!-- Page Header -->
+  <section class="border-b border-slate-800/50">
+    <div class="mx-auto max-w-5xl px-6 py-14">
+      <p class="mb-2 text-sm font-medium uppercase tracking-widest text-violet-400">Portfolio</p>
+      <h1 class="mb-3 text-3xl font-bold text-slate-100 md:text-4xl">作品集</h1>
+      <p class="max-w-xl text-slate-400">
+        游戏数值设计与 AI Agent 实践的真实项目案例，记录从问题定义到解决方案的完整过程。
+      </p>
+    </div>
+  </section>
+
+  <!-- Filter + Grid -->
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <!-- Category Filter Buttons -->
+    <div class="mb-8 flex flex-wrap gap-2" id="filter-buttons">
+      {categories.map((cat) => (
+        <button
+          data-filter={cat}
+          class:list={[
+            'filter-btn rounded-full px-4 py-1.5 text-sm font-medium transition-all',
+            cat === '全部'
+              ? 'bg-violet-600 text-white'
+              : 'border border-slate-700 text-slate-400 hover:border-violet-500 hover:text-slate-200',
+          ]}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Project Cards Grid -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2" id="projects-grid">
+      {projects.map((project) => (
+        <article
+          data-category={project.category}
+          class="project-card group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/40 p-6 transition-all duration-200 hover:border-slate-600 hover:bg-slate-900/70 hover:shadow-lg hover:shadow-slate-950/50"
+        >
+          <!-- Card Header -->
+          <div class="mb-4 flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <div class="mb-2 flex flex-wrap items-center gap-2">
+                <!-- Category badge -->
+                <span
+                  class:list={[
+                    'rounded-full px-2.5 py-0.5 text-xs font-medium',
+                    project.category === '游戏数值策划'
+                      ? 'bg-emerald-500/15 text-emerald-400'
+                      : 'bg-violet-500/15 text-violet-400',
+                  ]}
+                >
+                  {project.category}
+                </span>
+                <!-- Status badge -->
+                <span
+                  class:list={[
+                    'rounded-full px-2.5 py-0.5 text-xs',
+                    project.status === '已完成'
+                      ? 'bg-slate-800 text-slate-400'
+                      : 'bg-amber-500/15 text-amber-400',
+                  ]}
+                >
+                  {project.status}
+                </span>
+              </div>
+              <h2 class="text-base font-bold text-slate-100 group-hover:text-violet-300 transition-colors">
+                {project.title}
+              </h2>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="mb-4 flex-1 text-sm text-slate-400 leading-relaxed">
+            {project.description}
+          </p>
+
+          <!-- Highlights -->
+          <ul class="mb-4 space-y-1.5">
+            {project.highlights.map((h) => (
+              <li class="flex items-start gap-2 text-sm text-slate-500">
+                <span class="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-violet-500/60"></span>
+                {h}
+              </li>
+            ))}
+          </ul>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-1.5 border-t border-slate-800 pt-4">
+            {project.tags.map((tag) => (
+              <span class="rounded-md bg-slate-800/80 px-2 py-0.5 text-xs text-slate-500">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Empty state (shown when filter has no results) -->
+    <div id="empty-state" class="hidden py-20 text-center">
+      <p class="text-slate-500">该分类下暂无项目。</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const filterButtons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('.project-card');
+  const emptyState = document.getElementById('empty-state')!;
+
+  function applyFilter(filter: string) {
+    // Update button styles
+    filterButtons.forEach((btn) => {
+      const isActive = btn.dataset.filter === filter;
+      btn.classList.toggle('bg-violet-600', isActive);
+      btn.classList.toggle('text-white', isActive);
+      btn.classList.toggle('border', !isActive);
+      btn.classList.toggle('border-slate-700', !isActive);
+      btn.classList.toggle('text-slate-400', !isActive);
+    });
+
+    // Show/hide cards
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const matches = filter === '全部' || card.dataset.category === filter;
+      card.style.display = matches ? '' : 'none';
+      if (matches) visibleCount++;
+    });
+
+    emptyState.classList.toggle('hidden', visibleCount > 0);
+  }
+
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      applyFilter(btn.dataset.filter ?? '全部');
+    });
+  });
+</script>

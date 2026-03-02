@@ -1,0 +1,90 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, '') },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<BaseLayout title={`${post.data.title} — cy`} description={post.data.description}>
+  <article class="mx-auto max-w-3xl px-6 py-14">
+    <!-- Back link -->
+    <a
+      href="/blog"
+      class="mb-10 inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-300"
+    >
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      返回博客
+    </a>
+
+    <!-- Article Header -->
+    <header class="mb-10 border-b border-slate-800 pb-8">
+      <!-- Tags -->
+      <div class="mb-4 flex flex-wrap gap-2">
+        {post.data.tags.map((tag) => (
+          <span class="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs text-slate-400">
+            #{tag}
+          </span>
+        ))}
+      </div>
+
+      <!-- Title -->
+      <h1 class="mb-4 text-3xl font-bold leading-tight text-slate-100 md:text-4xl">
+        {post.data.title}
+      </h1>
+
+      <!-- Description -->
+      <p class="mb-5 text-lg text-slate-400 leading-relaxed">
+        {post.data.description}
+      </p>
+
+      <!-- Date -->
+      <time
+        datetime={post.data.pubDate.toISOString()}
+        class="text-sm text-slate-500"
+      >
+        {formatDate(post.data.pubDate)}
+      </time>
+    </header>
+
+    <!-- Article Body -->
+    <div class="prose-article">
+      <Content />
+    </div>
+
+    <!-- Footer navigation -->
+    <footer class="mt-16 border-t border-slate-800 pt-8 flex justify-between items-center">
+      <a
+        href="/blog"
+        class="text-sm text-violet-400 hover:text-violet-300 transition-colors"
+      >
+        ← 返回博客列表
+      </a>
+      <a
+        href="/"
+        class="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+      >
+        回到首页
+      </a>
+    </footer>
+  </article>
+</BaseLayout>
