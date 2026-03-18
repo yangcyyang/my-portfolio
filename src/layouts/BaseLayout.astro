@@ -20,11 +20,53 @@ const { title, description = '陈洋的个人网站：交互设计、游戏系�
     <meta name="theme-color" content="#020617" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <style is:inline>
+      body {
+        margin: 0;
+        background: #020617;
+        color: #e2e8f0;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+        z-index: 90;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+        transform: translateY(-180%);
+        opacity: 0;
+        padding: 0.65rem 1rem;
+        border-radius: 999px;
+        background: #67e8f9;
+        color: #020617;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+      }
+
+      .skip-link:focus,
+      .skip-link:active {
+        width: auto;
+        height: auto;
+        overflow: visible;
+        clip: auto;
+        clip-path: none;
+        white-space: normal;
+        transform: translateY(0);
+        opacity: 1;
+      }
+    </style>
   </head>
   <body class="flex min-h-screen flex-col">
     <a
       href="#main-content"
-      class="sr-only absolute left-4 top-4 z-50 rounded-full bg-cyan-300 px-4 py-2 text-sm font-medium text-slate-950 focus:not-sr-only focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+      class="skip-link sr-only absolute left-4 top-4 z-50 rounded-full bg-cyan-300 px-4 py-2 text-sm font-medium text-slate-950 focus:not-sr-only focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
     >
       跳到主要内容
     </a>
