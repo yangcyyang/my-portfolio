@@ -129,33 +129,48 @@ const isImmersivePage = isHomePage || isPortfolioDetail || currentPath.startsWit
     list-style: none;
   }
 
+  /* iOS 14.2 Safari 兼容性 CSS */
+  .site-header a {
+    color: #94a3b8 !important;
+    text-decoration: none !important;
+  }
+
+  .site-logo {
+    color: #f8fafc !important;
+  }
+
   .site-nav__link {
     display: block;
-    border-radius: 0.5rem;
+    border-radius: 8px;
     color: #94a3b8 !important;
-    -webkit-text-fill-color: #94a3b8 !important;
     text-decoration: none !important;
     white-space: nowrap;
-    transition: background-color 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+    padding: 6px 12px;
+    background: transparent;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .site-nav__link:link,
-  .site-nav__link:visited {
+  .site-nav__link:visited,
+  .site-nav__link:active {
     color: #94a3b8 !important;
-    -webkit-text-fill-color: #94a3b8 !important;
+    text-decoration: none !important;
   }
 
   .site-nav__link:hover,
-  .site-nav__link:focus-visible {
+  .site-nav__link:focus {
     color: #f8fafc !important;
-    -webkit-text-fill-color: #f8fafc !important;
-    background: rgba(30, 41, 59, 0.9);
+    background: #1e293b;
+    text-decoration: none !important;
   }
 
-  .site-nav__link--active {
-    background: rgba(139, 92, 246, 0.16);
+  .site-nav__link--active,
+  .site-nav__link--active:link,
+  .site-nav__link--active:visited {
+    background: rgba(139, 92, 246, 0.15);
     color: #c4b5fd !important;
-    -webkit-text-fill-color: #c4b5fd !important;
+    text-decoration: none !important;
   }
 
   @media (max-width: 960px) {
