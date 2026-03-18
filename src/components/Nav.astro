@@ -16,24 +16,29 @@ const isImmersivePage = isHomePage || isPortfolioDetail || currentPath.startsWit
 
 <header
   class:list={[
-    'top-0 z-50',
+    'site-header top-0 z-50',
     isImmersivePage
-      ? 'absolute inset-x-0 border-b-0 bg-transparent'
-      : 'sticky border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-md',
+      ? 'site-header--immersive absolute inset-x-0 border-b-0 bg-transparent'
+      : 'site-header--default sticky border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-md',
   ]}
 >
-  <div class:list={['mx-auto flex items-center justify-between px-6 py-4', isImmersivePage ? 'max-w-7xl' : 'max-w-5xl']}>
+  <div
+    class:list={[
+      'site-header__inner mx-auto flex items-center justify-between px-6 py-4',
+      isImmersivePage ? 'max-w-7xl' : 'site-header__inner--standard max-w-5xl',
+    ]}
+  >
     <!-- Logo / Site Name -->
     <a
       href="/"
-      class="text-lg font-bold tracking-tight text-slate-100 transition-opacity hover:opacity-80"
+      class="site-logo text-lg font-bold tracking-tight text-slate-100 transition-opacity hover:opacity-80"
     >
       <span class="text-violet-400">&lt;</span>cy<span class="text-violet-400">/&gt;</span>
     </a>
 
     <!-- Navigation Links -->
-    <nav>
-      <ul class="flex items-center gap-1">
+    <nav class="site-nav" aria-label="主导航">
+      <ul class="site-nav__list flex items-center gap-1">
         {
           navLinks.map(({ href, label }) => {
             const isActive =
@@ -43,13 +48,13 @@ const isImmersivePage = isHomePage || isPortfolioDetail || currentPath.startsWit
                   ? currentPath.startsWith('/skills-explorer') || currentPath.startsWith('/tarot')
                   : currentPath.startsWith(href);
             return (
-              <li>
+              <li class="site-nav__item">
                 <a
                   href={href}
                   class:list={[
-                    'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                    'site-nav__link rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-violet-500/15 text-violet-300'
+                      ? 'site-nav__link--active bg-violet-500/15 text-violet-300'
                       : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100',
                   ]}
                 >
@@ -63,3 +68,121 @@ const isImmersivePage = isHomePage || isPortfolioDetail || currentPath.startsWit
     </nav>
   </div>
 </header>
+
+<style is:inline>
+  .site-header {
+    width: 100%;
+  }
+
+  .site-header--default {
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+    background: rgba(2, 6, 23, 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+
+  .site-header--immersive {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: transparent;
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-header__inner--standard {
+    max-width: 64rem;
+  }
+
+  .site-logo {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    color: #f8fafc;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .site-nav {
+    min-width: 0;
+  }
+
+  .site-nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav__item {
+    list-style: none;
+  }
+
+  .site-nav__link {
+    display: block;
+    border-radius: 0.5rem;
+    color: #94a3b8;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+  }
+
+  .site-nav__link:hover,
+  .site-nav__link:focus-visible {
+    color: #f8fafc;
+    background: rgba(30, 41, 59, 0.9);
+  }
+
+  .site-nav__link--active {
+    background: rgba(139, 92, 246, 0.16);
+    color: #c4b5fd;
+  }
+
+  @media (max-width: 960px) {
+    .site-header__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .site-nav {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .site-nav__list {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      min-width: max-content;
+      padding-bottom: 0.2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-header__inner {
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .site-nav__list {
+      gap: 0.5rem;
+    }
+
+    .site-nav__link {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+</style>
