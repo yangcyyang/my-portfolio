@@ -105,8 +105,8 @@ const isImmersivePage = isHomePage || isPortfolioDetail || currentPath.startsWit
     display: inline-flex;
     align-items: center;
     flex: 0 0 auto;
-    color: #f8fafc;
-    text-decoration: none;
+    color: #f8fafc !important;
+    text-decoration: none !important;
     white-space: nowrap;
   }
 
@@ -132,21 +132,30 @@ const isImmersivePage = isHomePage || isPortfolioDetail || currentPath.startsWit
   .site-nav__link {
     display: block;
     border-radius: 0.5rem;
-    color: #94a3b8;
-    text-decoration: none;
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    text-decoration: none !important;
     white-space: nowrap;
     transition: background-color 0.18s ease, color 0.18s ease, opacity 0.18s ease;
   }
 
+  .site-nav__link:link,
+  .site-nav__link:visited {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+  }
+
   .site-nav__link:hover,
   .site-nav__link:focus-visible {
-    color: #f8fafc;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
     background: rgba(30, 41, 59, 0.9);
   }
 
   .site-nav__link--active {
     background: rgba(139, 92, 246, 0.16);
-    color: #c4b5fd;
+    color: #c4b5fd !important;
+    -webkit-text-fill-color: #c4b5fd !important;
   }
 
   @media (max-width: 960px) {
