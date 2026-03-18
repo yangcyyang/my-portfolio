@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const aiProjects = [
+  {
+    title: '神秘塔罗',
+    category: 'AI 交互体验',
+    status: '可体验',
+    href: '/tarot',
+    description: '一个偏生成式 UI 风格的互动塔罗实验，通过抽牌反馈、动效与情绪氛围，验证轻量 AI 娱乐体验的表达方式。',
+    highlights: [
+      '沉浸式抽牌动效与反馈节奏设计',
+      '以轻交互包装一类 AI 娱乐体验',
+      '适合作为 AI 探索里的体验型项目入口',
+    ],
+    tags: ['交互实验', '娱乐体验', '生成式 UI'],
+  },
+  {
+    title: '本地大模型调优方案',
+    category: '本地模型实践',
+    status: '整理中',
+    href: null,
+    description: '持续记录模型选择、参数调优、知识注入、本地部署与效果对比，准备整理成更完整的长期实践案例。',
+    highlights: [
+      '关注更可控的本地模型能力底座',
+      '沉淀调优过程中的参数与策略选择',
+      '后续会补充部署对比与场景验证',
+    ],
+    tags: ['本地模型', '调优实验', '知识注入'],
+  },
+  {
+    title: '多 Agent 工作流实验',
+    category: 'Agent 工作流',
+    status: '整理中',
+    href: null,
+    description: '记录从信息收集、任务编排到自动执行的多 Agent 协作方式，重点关注真正能带来效率提升的组合形态。',
+    highlights: [
+      '验证多 Agent 分工与协作边界',
+      '沉淀任务编排、检查与交付方式',
+      '持续筛选有效而非炫技的工作流',
+    ],
+    tags: ['Agent', '自动化', '工作流'],
+  },
+  {
+    title: 'AI 信息整合与内容生产',
+    category: '内容系统',
+    status: '待归档',
+    href: null,
+    description: '整理搜索、知识库、内容生成与分发之间的串联方式，逐步形成个人可复用的信息整合与内容生产方案。',
+    highlights: [
+      '关注从信息输入到内容输出的整链路',
+      '尝试搭建可复用的个人内容系统',
+      '后续会继续补充数据源与自动化环节',
+    ],
+    tags: ['信息流', '内容生成', '知识库'],
+  },
+];
+
+const categories = ['全部', ...Array.from(new Set(aiProjects.map((project) => project.category)))];
+---
+
+<BaseLayout title="AI 探索 — 陈洋" description="陈洋的 AI 探索项目、交互实验与工作流实践归档。">
+  <section class="border-b border-slate-800/50">
+    <div class="mx-auto max-w-5xl px-6 py-14">
+      <p class="mb-2 text-sm font-medium uppercase tracking-widest text-violet-400">AI Exploration</p>
+      <h1 class="mb-3 text-3xl font-bold text-slate-100 md:text-4xl">AI 探索</h1>
+      <p class="max-w-xl text-slate-400">
+        这里集中展示我围绕 Agent 工作流、本地模型实践、内容系统与互动体验做过的项目和实验。塔罗也并入这一组，作为一个体验型 AI 项目入口。
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <div class="mb-8 flex flex-wrap gap-2" id="ai-filter-buttons">
+      {categories.map((cat) => (
+        <button
+          data-filter={cat}
+          class:list={[
+            'ai-filter-btn rounded-full px-4 py-1.5 text-sm font-medium transition-all',
+            cat === '全部'
+              ? 'bg-violet-600 text-white'
+              : 'border border-slate-700 text-slate-400 hover:border-violet-500 hover:text-slate-200',
+          ]}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2" id="ai-projects-grid">
+      {aiProjects.map((project) => {
+        const CardTag = project.href ? 'article' : 'article';
+        const linkHref = project.href ?? undefined;
+
+        return (
+          <CardTag
+            data-category={project.category}
+            class="ai-project-card group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/40 p-6 transition-all duration-200 hover:border-slate-600 hover:bg-slate-900/70 hover:shadow-lg hover:shadow-slate-950/50"
+          >
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <div class="flex-1">
+                <div class="mb-2 flex flex-wrap items-center gap-2">
+                  <span
+                    class:list={[
+                      'rounded-full px-2.5 py-0.5 text-xs font-medium',
+                      project.category === 'AI 产品方案'
+                        ? 'bg-cyan-500/15 text-cyan-300'
+                        : project.category === 'AI 交互体验'
+                          ? 'bg-fuchsia-500/15 text-fuchsia-300'
+                          : project.category === 'Agent 工作流'
+                            ? 'bg-emerald-500/15 text-emerald-300'
+                            : project.category === '本地模型实践'
+                              ? 'bg-amber-500/15 text-amber-300'
+                              : 'bg-violet-500/15 text-violet-300',
+                    ]}
+                  >
+                    {project.category}
+                  </span>
+                  <span
+                    class:list={[
+                      'rounded-full px-2.5 py-0.5 text-xs',
+                      project.status === '已完成'
+                        ? 'bg-slate-800 text-slate-400'
+                        : project.status === '可体验'
+                          ? 'bg-fuchsia-500/12 text-fuchsia-300'
+                          : project.status === '整理中'
+                            ? 'bg-amber-500/15 text-amber-400'
+                            : 'bg-slate-800 text-slate-400',
+                    ]}
+                  >
+                    {project.status}
+                  </span>
+                </div>
+                <h2 class="text-base font-bold text-slate-100 transition-colors group-hover:text-violet-300">
+                  {project.href ? (
+                    <a href={linkHref} target="_blank" rel="noreferrer" class="hover:underline">
+                      {project.title}
+                    </a>
+                  ) : (
+                    project.title
+                  )}
+                </h2>
+              </div>
+            </div>
+
+            <p class="mb-4 flex-1 text-sm leading-relaxed text-slate-400">{project.description}</p>
+
+            <ul class="mb-4 space-y-1.5">
+              {project.highlights.map((highlight) => (
+                <li class="flex items-start gap-2 text-sm text-slate-500">
+                  <span class="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-violet-500/60"></span>
+                  {highlight}
+                </li>
+              ))}
+            </ul>
+
+            <div class="flex flex-wrap gap-1.5 border-t border-slate-800 pt-4">
+              {project.tags.map((tag) => (
+                <span class="rounded-md bg-slate-800/80 px-2 py-0.5 text-xs text-slate-500">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {project.href ? (
+              <a
+                href={linkHref}
+                target="_blank"
+                rel="noreferrer"
+                class="mt-4 inline-flex w-fit items-center gap-1 text-sm text-violet-400 hover:text-violet-300"
+              >
+                {project.href === '/tarot' ? '立即体验' : '查看详情'} <span aria-hidden="true">→</span>
+              </a>
+            ) : (
+              <span class="mt-4 inline-flex w-fit items-center gap-1 text-sm text-slate-500">
+                整理中 <span aria-hidden="true">·</span>
+              </span>
+            )}
+          </CardTag>
+        );
+      })}
+    </div>
+
+    <div id="ai-empty-state" class="hidden py-20 text-center">
+      <p class="text-slate-500">该分类下暂无项目。</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const filterButtons = document.querySelectorAll<HTMLButtonElement>('.ai-filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('.ai-project-card');
+  const emptyState = document.getElementById('ai-empty-state');
+
+  function applyFilter(filter: string) {
+    filterButtons.forEach((btn) => {
+      const isActive = btn.dataset.filter === filter;
+      btn.classList.toggle('bg-violet-600', isActive);
+      btn.classList.toggle('text-white', isActive);
+      btn.classList.toggle('border', !isActive);
+      btn.classList.toggle('border-slate-700', !isActive);
+      btn.classList.toggle('text-slate-400', !isActive);
+    });
+
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const matches = filter === '全部' || card.dataset.category === filter;
+      card.style.display = matches ? '' : 'none';
+      if (matches) visibleCount++;
+    });
+
+    emptyState?.classList.toggle('hidden', visibleCount > 0);
+  }
+
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      applyFilter(btn.dataset.filter ?? '全部');
+    });
+  });
+</script>

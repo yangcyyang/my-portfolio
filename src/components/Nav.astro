@@ -1,16 +1,28 @@
 ---
 const navLinks = [
   { href: '/', label: '首页' },
+  { href: '/resume', label: '个人履历' },
   { href: '/portfolio', label: '作品集' },
+  { href: '/skills-explorer', label: 'AI 探索' },
   { href: '/blog', label: '博客' },
   { href: '/murmurs', label: '碎碎念' },
 ];
 
 const currentPath = Astro.url.pathname;
+const isHomePage = currentPath === '/';
+const isPortfolioDetail = currentPath.startsWith('/portfolio/') && currentPath !== '/portfolio';
+const isImmersivePage = isHomePage || isPortfolioDetail || currentPath.startsWith('/tarot');
 ---
 
-<header class="sticky top-0 z-50 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-md">
-  <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+<header
+  class:list={[
+    'top-0 z-50',
+    isImmersivePage
+      ? 'absolute inset-x-0 border-b-0 bg-transparent'
+      : 'sticky border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-md',
+  ]}
+>
+  <div class:list={['mx-auto flex items-center justify-between px-6 py-4', isImmersivePage ? 'max-w-7xl' : 'max-w-5xl']}>
     <!-- Logo / Site Name -->
     <a
       href="/"
@@ -25,7 +37,11 @@ const currentPath = Astro.url.pathname;
         {
           navLinks.map(({ href, label }) => {
             const isActive =
-              href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+              href === '/'
+                ? currentPath === '/'
+                : href === '/skills-explorer'
+                  ? currentPath.startsWith('/skills-explorer') || currentPath.startsWith('/tarot')
+                  : currentPath.startsWith(href);
             return (
               <li>
                 <a

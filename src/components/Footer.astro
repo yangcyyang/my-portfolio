@@ -1,22 +1,310 @@
 ---
+import { getCollection } from 'astro:content';
+
 const year = new Date().getFullYear();
+const profileEntries = await getCollection('profile');
+const profile = profileEntries[0]?.data;
+
+const contactItems = [
+  {
+    label: '邮箱',
+    detailLabel: '邮箱地址',
+    value: profile?.email ?? '928590029@qq.com',
+    href: `mailto:${profile?.email ?? '928590029@qq.com'}`,
+  },
+  {
+    label: '手机',
+    detailLabel: '手机号码',
+    value: profile?.phone ?? '15626239460',
+    href: `tel:${profile?.phone ?? '15626239460'}`,
+  },
+  {
+    label: '微信',
+    detailLabel: '微信号',
+    value: profile?.wechat ?? 'yangcyyang',
+  },
+];
 ---
 
-<footer class="border-t border-slate-800/60 mt-20">
-  <div class="mx-auto max-w-5xl px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+<footer class="mt-20 border-t border-slate-800/60">
+  <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
     <p class="text-sm text-slate-500">
-      &copy; {year} cy. 用心构建。
+      &copy; {year} 陈洋. 用心构建。
     </p>
-    <div class="flex items-center gap-5 text-sm text-slate-500">
-      <a href="https://github.com" target="_blank" rel="noopener" class="hover:text-slate-300 transition-colors">
-        GitHub
-      </a>
-      <a href="/blog" class="hover:text-slate-300 transition-colors">
+    <div class="footer-links text-sm text-slate-500">
+      {contactItems.map((item) => (
+        <div class="footer-contact">
+          <button
+            type="button"
+            class="footer-contact__trigger"
+            aria-label={`${item.label}联系方式`}
+          >
+            {item.label}
+          </button>
+          <div class="footer-contact__panel" role="status" aria-live="polite">
+            <span class="footer-contact__caption">{item.detailLabel}</span>
+            <div class="footer-contact__row">
+              {item.href ? (
+                <a href={item.href} class="footer-contact__value">
+                  {item.value}
+                </a>
+              ) : (
+                <span class="footer-contact__value">{item.value}</span>
+              )}
+              <button
+                type="button"
+                class="footer-contact__copy"
+                data-copy-value={item.value}
+              >
+                复制
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+      <a href="/blog" class="footer-link">
         博客
       </a>
-      <a href="/portfolio" class="hover:text-slate-300 transition-colors">
+      <a href="/portfolio" class="footer-link">
         作品集
       </a>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  (() => {
+    const copyButtons = document.querySelectorAll('[data-copy-value]');
+
+    if (copyButtons.length === 0) return;
+
+    const fallbackCopy = (text) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      textarea.style.pointerEvents = 'none';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      if (!copied) {
+        throw new Error('copy failed');
+      }
+    };
+
+    const copyText = async (text) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      fallbackCopy(text);
+    };
+
+    copyButtons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const initialText = button.textContent?.trim() || '复制';
+
+      button.addEventListener('click', async () => {
+        const text = button.dataset.copyValue;
+        const existingTimer = Number(button.dataset.resetTimer || '0');
+
+        if (!text) return;
+        if (existingTimer) {
+          window.clearTimeout(existingTimer);
+        }
+
+        try {
+          await copyText(text);
+          button.textContent = '已复制';
+        } catch (error) {
+          console.error(error);
+          button.textContent = '复制失败';
+        }
+
+        const timer = window.setTimeout(() => {
+          button.textContent = initialText;
+          delete button.dataset.resetTimer;
+        }, 1600);
+
+        button.dataset.resetTimer = String(timer);
+      });
+    });
+  })();
+</script>
+
+<style>
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem 1.3rem;
+  }
+
+  .footer-link,
+  .footer-contact__trigger {
+    color: rgb(100 116 139);
+    transition:
+      color 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .footer-link:hover,
+  .footer-link:focus-visible,
+  .footer-contact__trigger:hover,
+  .footer-contact__trigger:focus-visible {
+    color: rgb(226 232 240);
+  }
+
+  .footer-link:focus-visible,
+  .footer-contact__trigger:focus-visible,
+  .footer-contact__copy:focus-visible,
+  .footer-contact__value:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.55);
+    border-radius: 999px;
+  }
+
+  .footer-contact {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-contact::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    width: calc(100% + 1.5rem);
+    height: 1rem;
+    transform: translateX(-50%);
+  }
+
+  .footer-contact__trigger {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .footer-contact__panel {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.25rem);
+    z-index: 20;
+    min-width: 14rem;
+    max-width: min(18rem, calc(100vw - 2rem));
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 1rem;
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
+    box-shadow: 0 22px 60px rgba(2, 6, 23, 0.45);
+    padding: 0.9rem 0.95rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 0.65rem) scale(0.97);
+    transform-origin: bottom center;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease,
+      visibility 180ms ease;
+    backdrop-filter: blur(18px);
+  }
+
+  .footer-contact__panel::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: calc(100% - 0.18rem);
+    width: 0.9rem;
+    height: 0.9rem;
+    border-right: 1px solid rgba(148, 163, 184, 0.18);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(2, 6, 23, 0.96);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .footer-contact:hover .footer-contact__panel,
+  .footer-contact:focus-within .footer-contact__panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  .footer-contact__caption {
+    display: block;
+    margin-bottom: 0.65rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.72);
+  }
+
+  .footer-contact__row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .footer-contact__value {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: anywhere;
+    color: rgb(248 250 252);
+  }
+
+  .footer-contact__copy {
+    flex: none;
+    border: 1px solid rgba(103, 232, 249, 0.22);
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.08);
+    color: rgb(165 243 252);
+    padding: 0.35rem 0.8rem;
+    font-size: 0.78rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .footer-contact__copy:hover,
+  .footer-contact__copy:focus-visible {
+    border-color: rgba(103, 232, 249, 0.5);
+    background: rgba(34, 211, 238, 0.16);
+    color: rgb(236 254 255);
+  }
+
+  @media (max-width: 640px) {
+    .footer-links {
+      gap: 0.8rem 1rem;
+    }
+
+    .footer-contact__panel {
+      left: 0;
+      transform: translateY(0.65rem) scale(0.97);
+      transform-origin: bottom left;
+    }
+
+    .footer-contact__panel::after {
+      left: 1.6rem;
+      transform: rotate(45deg);
+    }
+
+    .footer-contact:hover .footer-contact__panel,
+    .footer-contact:focus-within .footer-contact__panel {
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

@@ -5,8 +5,17 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://my-portfolio.vercel.app',
+  site: 'https://yangcyyang.cn',
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    server: {
+      watch: {
+        // Obsidian auto-saves aggressively; wait for writes to settle before reloading.
+        awaitWriteFinish: {
+          stabilityThreshold: 2500,
+          pollInterval: 200,
+        },
+      },
+    },
   }
 });

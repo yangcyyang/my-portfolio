@@ -1,0 +1,1474 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const tarotCardImages = [
+  '/images/tarot-cats/00_The_Fool.webp',
+  '/images/tarot-cats/01_The_Magician.webp',
+  '/images/tarot-cats/02_The_High_Priestess.webp',
+  '/images/tarot-cats/03_The_Empress.webp',
+  '/images/tarot-cats/04_The_Emperor.webp',
+  '/images/tarot-cats/05_The_Hierophant.webp',
+  '/images/tarot-cats/06_The_Lovers.webp',
+  '/images/tarot-cats/07_The_Chariot.webp',
+  '/images/tarot-cats/08_Strength.webp',
+  '/images/tarot-cats/09_The_Hermit.webp',
+  '/images/tarot-cats/10_Wheel_of_Fortune.webp',
+  '/images/tarot-cats/11_Justice.webp',
+  '/images/tarot-cats/12_The_Hanged_Man.webp',
+  '/images/tarot-cats/13_Death.webp',
+  '/images/tarot-cats/14_Temperance.webp',
+  '/images/tarot-cats/15_The_Devil.webp',
+  '/images/tarot-cats/16_The_Tower.webp',
+  '/images/tarot-cats/17_The_Star.webp',
+  '/images/tarot-cats/18_The_Moon.webp',
+  '/images/tarot-cats/19_The_Sun.webp',
+  '/images/tarot-cats/20_Judgement.webp',
+  '/images/tarot-cats/21_The_World.webp',
+];
+
+const tarotCards = [
+  { id: 0, name: '愚者', nameEn: 'The Fool', number: '0', element: '风', meaning: '新的开始，冒险，纯真，自发', advice: '拥抱未知，相信直觉，勇敢迈出第一步', color: '#f4b63f' },
+  { id: 1, name: '魔术师', nameEn: 'The Magician', number: 'I', element: '风', meaning: '创造力，意志力，显化，专注', advice: '利用你的资源和技能，将想法变为现实', color: '#b54cff' },
+  { id: 2, name: '女祭司', nameEn: 'The High Priestess', number: 'II', element: '水', meaning: '直觉，神秘，潜意识，内在智慧', advice: '倾听内心的声音，相信你的直觉', color: '#46b9db' },
+  { id: 3, name: '皇后', nameEn: 'The Empress', number: 'III', element: '土', meaning: '丰饶，母性，创造力，感官享受', advice: '照顾自己和重要的人，允许丰盛自然发生', color: '#2cb67d' },
+  { id: 4, name: '皇帝', nameEn: 'The Emperor', number: 'IV', element: '火', meaning: '权威，结构，控制，父性', advice: '建立秩序和规则，用逻辑解决问题', color: '#d94b3d' },
+  { id: 5, name: '教皇', nameEn: 'The Hierophant', number: 'V', element: '土', meaning: '传统，信仰，教育，精神指引', advice: '尊重传统，寻求导师的指导', color: '#f78c3d' },
+  { id: 6, name: '恋人', nameEn: 'The Lovers', number: 'VI', element: '风', meaning: '爱情，和谐，选择，价值观', advice: '跟随内心做选择，珍惜重要关系', color: '#f06aa4' },
+  { id: 7, name: '战车', nameEn: 'The Chariot', number: 'VII', element: '水', meaning: '意志力，胜利，决心，控制', advice: '保持专注，用意志力克服困难', color: '#3f86ff' },
+  { id: 8, name: '力量', nameEn: 'Strength', number: 'VIII', element: '火', meaning: '勇气，耐心，内在力量，同情心', advice: '用温柔和耐心驯服内心的野兽', color: '#f1b93d' },
+  { id: 9, name: '隐者', nameEn: 'The Hermit', number: 'IX', element: '土', meaning: '内省，孤独，寻求真理，指引', advice: '独处一段时间，寻找内在的答案', color: '#7379ff' },
+  { id: 10, name: '命运之轮', nameEn: 'Wheel of Fortune', number: 'X', element: '火', meaning: '命运，周期，运气，转折点', advice: '接受生活的起伏，顺应变化', color: '#22c7b8' },
+  { id: 11, name: '正义', nameEn: 'Justice', number: 'XI', element: '风', meaning: '公正，真理，因果，法律', advice: '做出公正的决定，面对因果', color: '#9a68ff' },
+  { id: 12, name: '倒吊人', nameEn: 'The Hanged Man', number: 'XII', element: '水', meaning: '牺牲，新视角，等待，放手', advice: '换个角度看问题，有时候等待是最好的选择', color: '#a4ca2b' },
+  { id: 13, name: '死神', nameEn: 'Death', number: 'XIII', element: '水', meaning: '转变，结束，新生，放下', advice: '接受结束，为新的开始腾出空间', color: '#4f5967' },
+  { id: 14, name: '节制', nameEn: 'Temperance', number: 'XIV', element: '火', meaning: '平衡，调和，耐心，适度', advice: '寻找中庸之道，避免极端', color: '#46cfe3' },
+  { id: 15, name: '恶魔', nameEn: 'The Devil', number: 'XV', element: '土', meaning: '束缚，欲望，物质主义，成瘾', advice: '认识到你的束缚，你有力量解脱', color: '#cb4138' },
+  { id: 16, name: '塔', nameEn: 'The Tower', number: 'XVI', element: '火', meaning: '突变，启示，解放，崩溃', advice: '接受剧变，从中学习和成长', color: '#fb7a6e' },
+  { id: 17, name: '星星', nameEn: 'The Star', number: 'XVII', element: '风', meaning: '希望，灵感，宁静，信心', advice: '保持希望，相信未来会更好', color: '#69a9ff' },
+  { id: 18, name: '月亮', nameEn: 'The Moon', number: 'XVIII', element: '水', meaning: '幻象，恐惧，潜意识，不确定性', advice: '面对恐惧，不要被表象迷惑', color: '#a98df6' },
+  { id: 19, name: '太阳', nameEn: 'The Sun', number: 'XIX', element: '火', meaning: '快乐，成功，活力，真理', advice: '拥抱快乐，展现真实的自我', color: '#f4c445' },
+  { id: 20, name: '审判', nameEn: 'Judgement', number: 'XX', element: '火', meaning: '重生，觉醒，宽恕，评估', advice: '回应内心的召唤，开始新的生活', color: '#ff7db1' },
+  { id: 21, name: '世界', nameEn: 'The World', number: 'XXI', element: '土', meaning: '完成，成就，圆满，整合', advice: '庆祝你的成就，准备新的旅程', color: '#27b474' },
+].map((card, index) => ({
+  ...card,
+  image: tarotCardImages[index],
+}));
+
+const initialCard = tarotCards[0];
+---
+
+<BaseLayout title="塔罗抽牌 - CY" description="Mondo 海报风格的交互式塔罗抽牌体验">
+  <div class="tarot-poster" id="tarotPoster">
+    <div class="tarot-poster__texture" aria-hidden="true"></div>
+    <div class="tarot-poster__grain" aria-hidden="true"></div>
+    <div class="tarot-poster__sun" aria-hidden="true"></div>
+    <div class="tarot-poster__arc tarot-poster__arc--left" aria-hidden="true"></div>
+    <div class="tarot-poster__arc tarot-poster__arc--right" aria-hidden="true"></div>
+    <div class="tarot-click-stars" id="tarotClickStars" aria-hidden="true"></div>
+    <div class="tarot-poster__dust" aria-hidden="true">
+      <span style="--dust-left: 9%; --dust-top: 18%; --dust-size: 3px; --dust-duration: 19s; --dust-delay: -2s;"></span>
+      <span style="--dust-left: 18%; --dust-top: 62%; --dust-size: 2px; --dust-duration: 24s; --dust-delay: -8s;"></span>
+      <span style="--dust-left: 31%; --dust-top: 28%; --dust-size: 4px; --dust-duration: 21s; --dust-delay: -5s;"></span>
+      <span style="--dust-left: 47%; --dust-top: 13%; --dust-size: 2px; --dust-duration: 26s; --dust-delay: -11s;"></span>
+      <span style="--dust-left: 57%; --dust-top: 74%; --dust-size: 3px; --dust-duration: 22s; --dust-delay: -3s;"></span>
+      <span style="--dust-left: 68%; --dust-top: 23%; --dust-size: 2px; --dust-duration: 18s; --dust-delay: -9s;"></span>
+      <span style="--dust-left: 79%; --dust-top: 58%; --dust-size: 4px; --dust-duration: 27s; --dust-delay: -6s;"></span>
+      <span style="--dust-left: 88%; --dust-top: 35%; --dust-size: 2px; --dust-duration: 20s; --dust-delay: -13s;"></span>
+    </div>
+
+    <section class="tarot-stage">
+      <header class="tarot-masthead">
+        <p class="tarot-kicker">AI Exploration / Interactive Poster</p>
+        <h1 class="tarot-title">
+          <span class="tarot-title__cn">神秘塔罗</span>
+          <span class="tarot-title__en">Mondo Tarot</span>
+        </h1>
+        <p class="tarot-subtitle">
+          把一次抽牌体验做成一张会动的海报。先聚焦你的问题，再翻开一张牌，让象征、配色和语义一起给出回应。
+        </p>
+      </header>
+
+      <div class="tarot-grid">
+        <aside class="tarot-panel tarot-panel--ritual">
+          <p class="tarot-panel__eyebrow">抽牌仪式</p>
+          <h2 class="tarot-panel__title">先想问题，再抽一张牌</h2>
+          <ol class="ritual-list">
+            <li>先把问题缩小到一个眼下最想确认的主题。</li>
+            <li>停两秒，让注意力只放在这个主题上。</li>
+            <li>点击牌堆，或者按空格，翻开今天的信号。</li>
+          </ol>
+          <div class="ritual-note">
+            <span class="ritual-note__label">快捷键</span>
+            <span class="ritual-note__value">Space</span>
+          </div>
+          <a class="ritual-link" href="/skills-explorer">返回 AI 探索</a>
+        </aside>
+
+        <main class="tarot-centerpiece">
+          <div class="centerpiece-frame">
+            <div class="centerpiece-topline">
+              <span>Poster Draw</span>
+              <span>22 Cards</span>
+            </div>
+
+            <div class="draw-section">
+              <div class="card-display is-visible" id="cardDisplay">
+                <div class="card-slot">
+                  <div
+                    class="tarot-card"
+                    id="tarotCard"
+                    role="button"
+                    tabindex="0"
+                    aria-label="抽一张牌"
+                  >
+                    <div class="tarot-card__inner">
+                      <div class="tarot-card__face tarot-card__face--back">
+                        <div class="card-back-design">
+                          <svg viewBox="0 0 100 140" class="card-back-design__svg" aria-hidden="true">
+                            <rect width="100" height="140" rx="8" fill="#220d14"></rect>
+                            <rect x="8" y="8" width="84" height="124" rx="6" fill="none" stroke="#f4d6a0" stroke-width="1.2" opacity="0.65"></rect>
+                            <circle cx="50" cy="70" r="24" fill="none" stroke="#f4d6a0" stroke-width="1.4" opacity="0.8"></circle>
+                            <path d="M50 42 L56 62 L76 62 L60 74 L66 96 L50 82 L34 96 L40 74 L24 62 L44 62 Z" fill="#f4d6a0" opacity="0.9"></path>
+                          </svg>
+                        </div>
+                      </div>
+
+                      <div class="tarot-card__face tarot-card__face--front" id="cardFront">
+                        <div class="card-front-design">
+                          <img
+                            class="card-artwork"
+                            id="cardArtwork"
+                            src={initialCard.image}
+                            alt={`${initialCard.name} ${initialCard.nameEn}`}
+                            loading="eager"
+                          />
+                          <div class="card-front-design__scrim" aria-hidden="true"></div>
+                          <div class="card-front-design__halo" aria-hidden="true"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-display__meta" id="cardMeta">
+                  <div class="card-number" id="cardNumber">0</div>
+                  <div class="card-name" id="cardName">愚者</div>
+                  <div class="card-name-en" id="cardNameEn">The Fool</div>
+                </div>
+              </div>
+
+              <div class="deck-container">
+                <div class="deck-caption">
+                  <span class="deck-caption__index">01</span>
+                  <span class="deck-caption__text">Tap To Reveal</span>
+                </div>
+                <button class="draw-trigger" id="drawTrigger" type="button">
+                  点击抽牌
+                </button>
+                <p class="deck-hint">点击大牌或按钮开始今天的抽牌</p>
+              </div>
+            </div>
+
+            <div class="centerpiece-footer">
+              <span>Limited palette</span>
+              <span>Symbol first</span>
+              <span>Meaning after</span>
+            </div>
+          </div>
+        </main>
+
+        <aside class="tarot-panel tarot-panel--insight">
+          <div class="signal-card">
+            <p class="tarot-panel__eyebrow">今日信号</p>
+            <h2 class="tarot-panel__title">翻牌后的解读会出现在这里</h2>
+            <p class="signal-card__text">
+              这不是预测结果，更像一张情绪化的设计提示卡。它帮你换一个角度理解当下的问题。
+            </p>
+          </div>
+
+          <div class="card-meaning" id="cardMeaning">
+            <div class="meaning-content">
+              <div class="meaning-header">
+                <span class="meaning-element" id="meaningElement">风元素</span>
+                <span class="meaning-keyword" id="meaningKeyword">新的开始</span>
+              </div>
+              <p class="meaning-text" id="meaningText">
+                代表纯真、自发性和新的开始。愚者鼓励你拥抱未知，相信直觉，勇敢迈出第一步。
+              </p>
+              <div class="meaning-advice">
+                <span class="advice-label">行动指引</span>
+                <p class="advice-text" id="adviceText">拥抱未知，相信直觉，勇敢迈出第一步</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="history-section" id="historySection">
+            <h2 class="history-title">今日抽牌记录</h2>
+            <div class="history-list" id="historyList"></div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="shuffle-overlay" id="shuffleOverlay">
+        <div class="shuffle-poster">
+          <div class="shuffle-animation">
+            <div class="shuffle-card" style="--i:0"></div>
+            <div class="shuffle-card" style="--i:1"></div>
+            <div class="shuffle-card" style="--i:2"></div>
+            <div class="shuffle-card" style="--i:3"></div>
+            <div class="shuffle-card" style="--i:4"></div>
+          </div>
+          <p class="shuffle-text">正在重排今天的象征语言...</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline define:vars={{ tarotCards }}>
+(() => {
+  let isDrawing = false;
+  let drawHistory = [];
+
+  const tarotPoster = document.getElementById('tarotPoster');
+  const drawTrigger = document.getElementById('drawTrigger');
+  const cardDisplay = document.getElementById('cardDisplay');
+  const tarotCard = document.getElementById('tarotCard');
+  const shuffleOverlay = document.getElementById('shuffleOverlay');
+  const historyList = document.getElementById('historyList');
+  const historySection = document.getElementById('historySection');
+  const clickStarsLayer = document.getElementById('tarotClickStars');
+  const cardMeta = document.getElementById('cardMeta');
+
+  const cardFront = document.getElementById('cardFront');
+  const cardArtwork = document.getElementById('cardArtwork');
+  const cardNumber = document.getElementById('cardNumber');
+  const cardName = document.getElementById('cardName');
+  const cardNameEn = document.getElementById('cardNameEn');
+  const cardMeaning = document.getElementById('cardMeaning');
+  const meaningElement = document.getElementById('meaningElement');
+  const meaningKeyword = document.getElementById('meaningKeyword');
+  const meaningText = document.getElementById('meaningText');
+  const adviceText = document.getElementById('adviceText');
+
+  const elementIcons = {
+    风: '风元素',
+    水: '水元素',
+    火: '火元素',
+    土: '土元素',
+  };
+
+  function spawnClickStars(clientX, clientY) {
+    if (!(clickStarsLayer instanceof HTMLElement)) {
+      return;
+    }
+    const symbols = ['✦', '✧', '✦', '✶', '✦', '✧', '✦'];
+    const colors = [
+      'var(--tarot-gold)',
+      'var(--tarot-paper)',
+      'var(--tarot-copper)',
+      'var(--tarot-ivory)',
+    ];
+
+    const createBurstPart = (className, duration) => {
+      const part = document.createElement('span');
+      part.className = className;
+      part.style.left = `${clientX}px`;
+      part.style.top = `${clientY}px`;
+      if (duration) {
+        part.style.animationDuration = duration;
+      }
+      clickStarsLayer.appendChild(part);
+      part.addEventListener('animationend', () => part.remove(), { once: true });
+    };
+
+    createBurstPart('click-burst__ring', '760ms');
+    createBurstPart('click-burst__core', '560ms');
+
+    symbols.forEach((symbol, index) => {
+      const star = document.createElement('span');
+      const angle = (Math.PI * 2 * index) / symbols.length + Math.random() * 0.35;
+      const distance = 30 + Math.random() * 44;
+      const size = 0.95 + Math.random() * 0.85;
+
+      star.className = 'click-star';
+      star.textContent = symbol;
+      star.style.left = `${clientX}px`;
+      star.style.top = `${clientY}px`;
+      star.style.setProperty('--star-x', `${Math.cos(angle) * distance}px`);
+      star.style.setProperty('--star-y', `${Math.sin(angle) * distance}px`);
+      star.style.setProperty('--star-rotate', `${-28 + Math.random() * 56}deg`);
+      star.style.setProperty('--star-size', `${size}rem`);
+      star.style.setProperty('--star-duration', `${760 + Math.random() * 260}ms`);
+      star.style.setProperty('--star-color', colors[index % colors.length]);
+      star.style.setProperty('--star-delay', `${Math.random() * 90}ms`);
+      clickStarsLayer.appendChild(star);
+      star.addEventListener('animationend', () => star.remove(), { once: true });
+    });
+  }
+
+  function drawCard() {
+    if (isDrawing) return;
+    isDrawing = true;
+
+    tarotCard?.classList.remove('is-flipped');
+    cardDisplay?.classList.remove('is-visible');
+    cardDisplay?.classList.remove('is-revealed');
+    cardMeaning?.classList.remove('is-visible');
+
+    shuffleOverlay?.classList.add('is-active');
+
+    window.setTimeout(() => {
+      const randomCard = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+      displayCard(randomCard);
+      shuffleOverlay?.classList.remove('is-active');
+      isDrawing = false;
+    }, 1500);
+  }
+
+  function displayCard(card) {
+    if (
+      !(cardFront instanceof HTMLElement) ||
+      !(cardArtwork instanceof HTMLImageElement) ||
+      !(cardNumber instanceof HTMLElement) ||
+      !(cardName instanceof HTMLElement) ||
+      !(cardNameEn instanceof HTMLElement) ||
+      !(meaningElement instanceof HTMLElement) ||
+      !(meaningKeyword instanceof HTMLElement) ||
+      !(meaningText instanceof HTMLElement) ||
+      !(adviceText instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    cardNumber.textContent = card.number;
+    cardName.textContent = card.name;
+    cardNameEn.textContent = card.nameEn;
+    cardArtwork.src = card.image;
+    cardArtwork.alt = `${card.name} ${card.nameEn}`;
+    meaningElement.textContent = elementIcons[card.element];
+    meaningKeyword.textContent = card.meaning.split('，')[0];
+    meaningText.textContent = `代表${card.meaning}。${card.name}牌提醒你${card.advice.slice(0, -1)}。`;
+    adviceText.textContent = card.advice;
+
+    cardFront.style.setProperty('--card-theme', card.color);
+
+    cardDisplay?.classList.add('is-visible');
+
+    window.setTimeout(() => {
+      tarotCard?.classList.add('is-flipped');
+
+      window.setTimeout(() => {
+        cardDisplay?.classList.add('is-revealed');
+        cardMeaning?.classList.add('is-visible');
+        addToHistory(card);
+      }, 400);
+    }, 280);
+  }
+
+  function addToHistory(card) {
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+    drawHistory.unshift({ card, time: timeStr });
+
+    if (drawHistory.length > 5) {
+      drawHistory = drawHistory.slice(0, 5);
+    }
+
+    if (drawHistory.length > 0) {
+      historySection?.classList.add('is-visible');
+    }
+
+    renderHistory();
+  }
+
+  function renderHistory() {
+    if (!(historyList instanceof HTMLElement)) return;
+
+    historyList.innerHTML = drawHistory
+      .map(
+        ({ card, time }) => `
+          <div class="history-item" style="--history-color: ${card.color}">
+            <span class="history-time">${time}</span>
+            <span class="history-card">${card.name}</span>
+            <span class="history-meaning">${card.meaning.split('，')[0]}</span>
+          </div>
+        `,
+      )
+      .join('');
+  }
+
+  drawTrigger?.addEventListener('click', drawCard);
+  tarotCard?.addEventListener('click', drawCard);
+  tarotCard?.addEventListener('keydown', (event) => {
+    if ((event.key === 'Enter' || event.key === ' ') && !isDrawing) {
+      event.preventDefault();
+      drawCard();
+    }
+  });
+
+  if (tarotPoster instanceof HTMLElement) {
+    tarotPoster.addEventListener('click', (event) => {
+      // 只在洗牌覆盖层激活时阻止点击特效
+      if (shuffleOverlay?.classList.contains('is-active')) {
+        return;
+      }
+      spawnClickStars(event.clientX, event.clientY);
+    });
+
+    tarotPoster.addEventListener('mousemove', (event) => {
+      const rect = tarotPoster.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      tarotPoster.style.setProperty('--parallax-x', `${(x * 2.4).toFixed(2)}px`);
+      tarotPoster.style.setProperty('--parallax-y', `${(y * 2.2).toFixed(2)}px`);
+    });
+
+    tarotPoster.addEventListener('mouseleave', () => {
+      tarotPoster.style.setProperty('--parallax-x', '0px');
+      tarotPoster.style.setProperty('--parallax-y', '0px');
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space' && !isDrawing) {
+      event.preventDefault();
+      drawCard();
+    }
+  });
+})();
+</script>
+
+<style>
+:root {
+  --tarot-bg: #18090c;
+  --tarot-panel: rgba(34, 14, 14, 0.84);
+  --tarot-panel-soft: rgba(51, 22, 18, 0.76);
+  --tarot-border: rgba(214, 179, 106, 0.24);
+  --tarot-gold: #d6b36a;
+  --tarot-copper: #b68256;
+  --tarot-ivory: #f7efd9;
+  --tarot-cream: #ead7ab;
+  --tarot-paper: #f2e6ca;
+  --tarot-red: #b68256;
+  --tarot-red-dark: #714829;
+  --tarot-ink: #12090d;
+  --tarot-muted: #cbbba0;
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+  --tarot-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%23d6b36a' stroke='%2369472b' stroke-width='1.2' d='M10.1 8.6c0-2 1.4-3.6 3.1-3.6s3.1 1.6 3.1 3.6-1.4 3.5-3.1 3.5-3.1-1.5-3.1-3.5Zm6.5-2.1c0-1.8 1.2-3.2 2.7-3.2s2.7 1.4 2.7 3.2-1.2 3.2-2.7 3.2-2.7-1.4-2.7-3.2Zm5.2 4.8c0-1.6 1.1-2.9 2.4-2.9s2.4 1.3 2.4 2.9-1.1 2.8-2.4 2.8-2.4-1.3-2.4-2.8ZM6.4 11.3c0-1.7 1.2-3 2.6-3s2.6 1.3 2.6 3-1.2 3-2.6 3-2.6-1.3-2.6-3Zm2.7 11.1c0-4.2 3.4-7.4 7.6-7.4 4.8 0 9.2 3.7 9.2 7.8 0 2.8-2.2 4.8-4.9 4.8-1.4 0-2.4-.4-3.5-1.2-.6-.4-1.1-.6-1.8-.6s-1.3.2-1.8.6c-1 .8-2 1.2-3.4 1.2-2.8 0-5.4-2-5.4-5.2Z'/%3E%3C/svg%3E") 8 4, auto;
+}
+
+.tarot-poster {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(197, 156, 94, 0.12), transparent 20%),
+    radial-gradient(circle at top, rgba(88, 29, 28, 0.46), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(214, 179, 106, 0.06), transparent 24%),
+    linear-gradient(180deg, #2a0f12 0%, #16090c 52%, #0f0608 100%);
+  color: var(--tarot-paper);
+}
+
+.tarot-poster,
+.tarot-poster * {
+  cursor: var(--tarot-cursor);
+}
+
+.tarot-poster__texture,
+.tarot-poster__grain,
+.tarot-poster__sun,
+.tarot-poster__arc,
+.tarot-click-stars,
+.tarot-poster__dust {
+  pointer-events: none;
+  position: absolute;
+}
+
+.tarot-poster__texture {
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(112deg, rgba(255, 248, 226, 0.05) 0, rgba(255, 248, 226, 0.05) 1px, transparent 1px, transparent 24px),
+    linear-gradient(90deg, rgba(107, 72, 44, 0.08) 0, rgba(107, 72, 44, 0.08) 1px, transparent 1px, transparent 36px),
+    radial-gradient(circle at 22% 18%, rgba(255, 241, 209, 0.12) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 68% 72%, rgba(124, 83, 56, 0.1) 0 1.1px, transparent 1.4px);
+  background-size: 44px 34px, 64px 64px, 17px 17px, 23px 23px;
+  mix-blend-mode: soft-light;
+  animation: tarotTextureShift 36s linear infinite;
+}
+
+.tarot-poster__grain {
+  inset: -20%;
+  opacity: 0.12;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(245, 232, 202, 0.14) 0 0.9px, transparent 1.2px),
+    radial-gradient(circle at 70% 40%, rgba(106, 73, 50, 0.12) 0 1px, transparent 1.3px),
+    radial-gradient(circle at 40% 70%, rgba(233, 214, 173, 0.12) 0 0.8px, transparent 1.1px);
+  background-size: 13px 13px, 17px 17px, 21px 21px;
+  mix-blend-mode: soft-light;
+  filter: contrast(115%);
+  animation: tarotGrainDrift 10s steps(6) infinite;
+}
+
+.tarot-poster__sun {
+  top: 5rem;
+  left: 50%;
+  width: min(52vw, 34rem);
+  height: min(52vw, 34rem);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(214, 179, 106, 0.2) 0 18%, rgba(214, 179, 106, 0.08) 32%, rgba(214, 179, 106, 0.02) 58%, transparent 78%);
+  opacity: 0.12;
+  filter: blur(16px);
+  animation: tarotSunPulse 7.4s ease-in-out infinite;
+}
+
+.tarot-poster__arc {
+  top: 8rem;
+  width: 26rem;
+  height: 26rem;
+  border: 1px solid rgba(182, 130, 86, 0.18);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(245, 232, 202, 0.02);
+  transition: transform 600ms ease-out;
+}
+
+.tarot-poster__arc--left {
+  left: -12rem;
+  transform: translate(calc(var(--parallax-x) * -0.65), calc(var(--parallax-y) * -0.65));
+  animation: tarotArcLeftDrift 18s ease-in-out infinite;
+}
+
+.tarot-poster__arc--right {
+  right: -12rem;
+  transform: translate(calc(var(--parallax-x) * 0.65), calc(var(--parallax-y) * 0.65));
+  animation: tarotArcRightDrift 20s ease-in-out infinite;
+}
+
+.tarot-poster__dust {
+  inset: 0;
+  overflow: hidden;
+}
+
+.tarot-click-stars {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+}
+
+.click-burst__ring,
+.click-burst__core,
+.click-star {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+}
+
+.click-burst__ring {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid rgba(214, 179, 106, 0.7);
+  border-radius: 999px;
+  box-shadow:
+    0 0 16px rgba(214, 179, 106, 0.16),
+    inset 0 0 12px rgba(247, 239, 217, 0.18);
+  opacity: 0;
+  animation: tarotBurstRing 760ms cubic-bezier(0.16, 0.8, 0.22, 1) forwards;
+}
+
+.click-burst__core {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--tarot-ivory) 0 38%, var(--tarot-gold) 39% 72%, transparent 73%);
+  box-shadow:
+    0 0 12px rgba(247, 239, 217, 0.36),
+    0 0 22px rgba(214, 179, 106, 0.24);
+  opacity: 0;
+  animation: tarotBurstCore 560ms ease-out forwards;
+}
+
+.click-star {
+  font-size: var(--star-size, 1rem);
+  line-height: 1;
+  color: var(--star-color, var(--tarot-paper));
+  text-shadow:
+    0 0 12px rgba(214, 179, 106, 0.34),
+    0 0 24px rgba(242, 230, 202, 0.22);
+  opacity: 0;
+  animation: tarotStarBurst var(--star-duration, 760ms) cubic-bezier(0.2, 0.78, 0.22, 1) forwards;
+  animation-delay: var(--star-delay, 0ms);
+}
+
+.tarot-poster__dust span {
+  position: absolute;
+  left: var(--dust-left);
+  top: var(--dust-top);
+  width: var(--dust-size);
+  height: var(--dust-size);
+  border-radius: 999px;
+  background: rgba(244, 214, 160, 0.34);
+  box-shadow: 0 0 12px rgba(244, 214, 160, 0.16);
+  opacity: 0;
+  animation: tarotDustFloat var(--dust-duration) ease-in-out infinite;
+  animation-delay: var(--dust-delay);
+}
+
+.tarot-stage {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.75rem 1.5rem 4rem;
+}
+
+@keyframes tarotTextureShift {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 48px 24px, -48px 12px, 30px -18px;
+  }
+}
+
+@keyframes tarotGrainDrift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-0.6%, 0.4%);
+  }
+  50% {
+    transform: translate(0.8%, -0.5%);
+  }
+  75% {
+    transform: translate(-0.3%, 0.7%);
+  }
+}
+
+@keyframes tarotSunPulse {
+  0%,
+  100% {
+    opacity: 0.06;
+    filter: blur(0.5px);
+  }
+  50% {
+    opacity: 0.11;
+    filter: blur(24px);
+  }
+}
+
+@keyframes tarotArcLeftDrift {
+  0%,
+  100% {
+    margin-top: 0;
+    margin-left: 0;
+  }
+  50% {
+    margin-top: 2px;
+    margin-left: -2px;
+  }
+}
+
+@keyframes tarotArcRightDrift {
+  0%,
+  100% {
+    margin-top: 0;
+    margin-left: 0;
+  }
+  50% {
+    margin-top: -2px;
+    margin-left: 2px;
+  }
+}
+
+@keyframes tarotDustFloat {
+  0% {
+    transform: translate3d(0, 4px, 0) scale(0.9);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.38;
+  }
+  50% {
+    transform: translate3d(3px, -7px, 0) scale(1);
+    opacity: 0.22;
+  }
+  82% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate3d(-2px, -14px, 0) scale(0.92);
+    opacity: 0;
+  }
+}
+
+@keyframes tarotStarBurst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35) rotate(0deg);
+  }
+  14% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--star-x)), calc(-50% + var(--star-y))) scale(1.18) rotate(var(--star-rotate));
+  }
+}
+
+@keyframes tarotBurstRing {
+  0% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(6.2);
+  }
+}
+
+@keyframes tarotBurstCore {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.3);
+  }
+}
+
+
+.tarot-masthead {
+  max-width: 48rem;
+  margin: 0 auto 1.35rem;
+  text-align: center;
+}
+
+.tarot-kicker,
+.tarot-panel__eyebrow,
+.centerpiece-topline,
+.centerpiece-footer,
+.advice-label {
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.tarot-kicker {
+  margin-bottom: 0.55rem;
+  font-size: 0.74rem;
+  color: rgba(244, 214, 160, 0.76);
+}
+
+.tarot-title {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: center;
+  margin: 0;
+}
+
+.tarot-title__cn {
+  font-family: "Baskerville", "Times New Roman", "Songti SC", serif;
+  font-size: clamp(2.5rem, 5.3vw, 4.9rem);
+  line-height: 0.95;
+  font-weight: 700;
+  color: var(--tarot-paper);
+  text-shadow: 0 0 30px rgba(214, 179, 106, 0.1);
+}
+
+.tarot-title__en {
+  font-family: "Avenir Next Condensed", "DIN Condensed", "Helvetica Neue", sans-serif;
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
+  font-weight: 700;
+  color: var(--tarot-gold);
+  letter-spacing: 0.42em;
+}
+
+.tarot-subtitle {
+  max-width: 42rem;
+  margin: 0.8rem auto 0;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: rgba(239, 226, 190, 0.78);
+}
+
+.tarot-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 320px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.tarot-panel,
+.centerpiece-frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--tarot-border);
+  background: linear-gradient(180deg, rgba(35, 12, 16, 0.88), rgba(15, 8, 12, 0.94));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+}
+
+.tarot-panel {
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+}
+
+.tarot-panel::before,
+.centerpiece-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(244, 214, 160, 0.08), transparent 42%);
+  pointer-events: none;
+}
+
+.tarot-panel__eyebrow {
+  position: relative;
+  margin: 0 0 0.8rem;
+  font-size: 0.68rem;
+  color: rgba(244, 214, 160, 0.72);
+}
+
+.tarot-panel__title {
+  position: relative;
+  margin: 0;
+  font-family: "Baskerville", "Times New Roman", "Songti SC", serif;
+  font-size: 1.85rem;
+  line-height: 1.08;
+  color: var(--tarot-paper);
+}
+
+.ritual-list {
+  position: relative;
+  margin: 1.25rem 0 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.9rem;
+  color: rgba(239, 226, 190, 0.76);
+  line-height: 1.8;
+}
+
+.ritual-list li::marker {
+  color: var(--tarot-gold);
+}
+
+.ritual-note {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.6rem;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  background: rgba(244, 214, 160, 0.06);
+  border: 1px solid rgba(244, 214, 160, 0.12);
+}
+
+.ritual-note__label {
+  color: rgba(239, 226, 190, 0.72);
+  font-size: 0.9rem;
+}
+
+.ritual-note__value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--tarot-paper);
+}
+
+.ritual-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1.2rem;
+  color: var(--tarot-gold);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.ritual-link:hover {
+  color: var(--tarot-ivory);
+}
+
+.tarot-centerpiece {
+  min-width: 0;
+}
+
+.centerpiece-frame {
+  border-radius: 2rem;
+  padding: 0.95rem;
+}
+
+.centerpiece-topline,
+.centerpiece-footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.68rem;
+  color: rgba(244, 214, 160, 0.62);
+}
+
+.centerpiece-footer {
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.65rem;
+}
+
+.draw-section {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  min-height: 610px;
+  padding: 1.15rem 1.2rem 0.8rem;
+}
+
+.deck-container {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+}
+
+.deck-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  color: rgba(244, 214, 160, 0.7);
+}
+
+.deck-caption__index {
+  font-family: "Baskerville", "Times New Roman", serif;
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--tarot-gold);
+}
+
+.deck-caption__text {
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.deck__card,
+.tarot-card__face {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.2rem;
+}
+
+.deck__pattern,
+.deck__svg,
+.card-back-design,
+.card-back-design__svg {
+  width: 100%;
+  height: 100%;
+}
+
+.draw-trigger {
+  min-width: 11rem;
+  min-height: 3.3rem;
+  padding: 0 1.2rem;
+  border: 1px solid rgba(214, 179, 106, 0.34);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(214, 179, 106, 0.92), rgba(164, 120, 68, 0.96));
+  color: #2a130f;
+  font-family: "Avenir Next Condensed", "DIN Condensed", "Helvetica Neue", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 245, 227, 0.24);
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+}
+
+.draw-trigger:hover {
+  transform: translateY(-2px);
+  border-color: rgba(247, 239, 217, 0.72);
+  background: linear-gradient(180deg, rgba(239, 213, 154, 0.98), rgba(186, 138, 81, 0.98));
+}
+
+.draw-trigger:active {
+  transform: translateY(0);
+}
+
+.deck-hint {
+  margin: 0;
+  font-size: 0.92rem;
+  color: rgba(239, 226, 190, 0.62);
+}
+
+.card-display {
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition: opacity 320ms ease, transform 320ms ease;
+  pointer-events: none;
+}
+
+.card-display.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.card-slot {
+  perspective: 1200px;
+}
+
+.tarot-card {
+  position: relative;
+  width: 260px;
+  height: 364px;
+  cursor: pointer;
+  transition:
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+.tarot-card:not(.is-flipped):hover {
+  transform: translateY(-6px) scale(1.015);
+  filter: drop-shadow(0 22px 38px rgba(182, 130, 86, 0.16));
+}
+
+.tarot-card.is-flipped:hover {
+  transform: translateY(-6px) scale(1.015);
+  filter: drop-shadow(0 24px 42px rgba(214, 179, 106, 0.24));
+}
+
+.tarot-card__inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 880ms cubic-bezier(0.18, 0.88, 0.24, 1.12);
+}
+
+.tarot-card.is-flipped .tarot-card__inner {
+  transform: rotateY(180deg);
+}
+
+.tarot-card__face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow:
+    0 28px 56px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(244, 214, 160, 0.14);
+  transition:
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.tarot-card__face--front {
+  transform: rotateY(180deg) translateZ(1px);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, #221117 0%, #15090f 100%);
+  border: 2px solid rgba(214, 179, 106, 0.82);
+}
+
+.tarot-card:not(.is-flipped):hover .tarot-card__face {
+  box-shadow:
+    0 34px 68px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(244, 214, 160, 0.22),
+    0 0 0 1px rgba(244, 214, 160, 0.08);
+}
+
+.tarot-card:not(.is-flipped):hover .tarot-card__face--back {
+  box-shadow:
+    0 34px 68px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(244, 214, 160, 0.24),
+    0 0 24px rgba(244, 214, 160, 0.08);
+}
+
+.tarot-card.is-flipped:hover .tarot-card__face--front {
+  box-shadow:
+    0 36px 74px rgba(0, 0, 0, 0.46),
+    inset 0 0 0 1px rgba(247, 239, 217, 0.28),
+    0 0 30px rgba(214, 179, 106, 0.18);
+  border-color: var(--tarot-ivory);
+}
+
+.card-front-design,
+.card-back-design {
+  position: relative;
+}
+
+.card-front-design {
+  display: block;
+  height: 100%;
+  padding: 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.card-artwork {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 46%;
+  transform: scale(1.05);
+  filter: saturate(1.02) contrast(1.02);
+}
+
+.card-front-design__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(10, 4, 8, 0.05) 0%, rgba(10, 4, 8, 0.09) 28%, rgba(12, 4, 8, 0.3) 100%),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.14), transparent 34%);
+}
+
+.card-front-design__halo {
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  width: 58%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(214, 179, 106, 0.28), rgba(214, 179, 106, 0.06) 42%, transparent 72%);
+  filter: blur(18px);
+  opacity: 0.48;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+.card-display__meta {
+  min-height: 5.2rem;
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  padding: 0.95rem 1rem 0.15rem;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.card-display.is-revealed .card-display__meta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tarot-card.is-flipped:hover .card-front-design__halo {
+  opacity: 0.82;
+  transform: translateX(-50%) scale(1.06);
+  filter: blur(10px);
+}
+
+.tarot-card.is-flipped:hover .card-name,
+.tarot-card.is-flipped:hover .card-name-en {
+  color: color-mix(in srgb, var(--tarot-paper) 92%, white 8%);
+}
+
+.card-number {
+  position: relative;
+  font-family: "Avenir Next Condensed", "DIN Condensed", "Helvetica Neue", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: color-mix(in srgb, var(--tarot-gold) 82%, #fff2cf 18%);
+}
+
+.card-name {
+  position: relative;
+  font-family: "Baskerville", "Times New Roman", "Songti SC", serif;
+  font-size: 2.25rem;
+  line-height: 1.05;
+  font-weight: 700;
+  color: #fff3d4;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.card-name-en {
+  position: relative;
+  font-size: 0.82rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 236, 197, 0.82);
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.signal-card__text,
+.meaning-text,
+.advice-text,
+.history-meaning,
+.history-time,
+.history-card {
+  position: relative;
+}
+
+.signal-card {
+  margin-bottom: 1rem;
+}
+
+.signal-card__text {
+  margin-top: 0.9rem;
+  color: rgba(239, 226, 190, 0.72);
+  line-height: 1.8;
+}
+
+.card-meaning {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 320ms ease 120ms, transform 320ms ease 120ms;
+  padding: 1.2rem;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(244, 214, 160, 0.12);
+  background: rgba(244, 214, 160, 0.045);
+}
+
+.card-meaning.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.meaning-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.meaning-element,
+.meaning-keyword {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.meaning-element {
+  background: rgba(244, 214, 160, 0.08);
+  color: rgba(239, 226, 190, 0.72);
+}
+
+.meaning-keyword {
+  background: rgba(214, 179, 106, 0.12);
+  color: var(--tarot-cream);
+}
+
+.meaning-text {
+  margin: 1rem 0 1.1rem;
+  color: rgba(239, 226, 190, 0.84);
+  line-height: 1.9;
+}
+
+.meaning-advice {
+  border-left: 3px solid var(--tarot-gold);
+  padding-left: 1rem;
+}
+
+.advice-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.68rem;
+  color: rgba(244, 214, 160, 0.68);
+}
+
+.advice-text {
+  margin: 0;
+  color: var(--tarot-paper);
+  line-height: 1.8;
+  font-style: italic;
+}
+
+.history-section {
+  margin-top: 1rem;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+
+.history-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.history-title {
+  margin: 0 0 0.9rem;
+  font-family: "Baskerville", "Times New Roman", "Songti SC", serif;
+  font-size: 1.35rem;
+  color: var(--tarot-paper);
+}
+
+.history-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.history-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(244, 214, 160, 0.1);
+  background: rgba(244, 214, 160, 0.04);
+  box-shadow: inset 3px 0 0 var(--history-color, var(--tarot-red));
+}
+
+.history-time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.76rem;
+  color: rgba(239, 226, 190, 0.48);
+}
+
+.history-card {
+  color: var(--tarot-paper);
+  font-weight: 600;
+}
+
+.history-meaning {
+  color: rgba(239, 226, 190, 0.62);
+  font-size: 0.9rem;
+}
+
+.shuffle-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(9, 5, 8, 0.92);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 240ms ease, visibility 240ms ease;
+  z-index: 100;
+}
+
+.shuffle-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.shuffle-poster {
+  display: grid;
+  justify-items: center;
+  gap: 1.6rem;
+}
+
+.shuffle-animation {
+  position: relative;
+  width: 220px;
+  height: 308px;
+}
+
+.shuffle-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(244, 214, 160, 0.22);
+  background: linear-gradient(180deg, #2a0f17, #18080f);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.34);
+  animation: shuffleDeck 1500ms ease-in-out infinite;
+  animation-delay: calc(var(--i) * 90ms);
+}
+
+@keyframes shuffleDeck {
+  0% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(-72px) rotate(-12deg);
+    opacity: 0.82;
+  }
+  50% {
+    transform: translateX(72px) rotate(12deg);
+    opacity: 0.82;
+  }
+  75% {
+    transform: translateX(-28px) rotate(-4deg);
+    opacity: 0.94;
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.shuffle-text {
+  margin: 0;
+  color: var(--tarot-paper);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1080px) {
+  .tarot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tarot-panel--ritual,
+  .tarot-panel--insight {
+    order: initial;
+  }
+
+  .draw-section {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .tarot-stage {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .tarot-subtitle {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .tarot-panel {
+    padding: 1.15rem;
+  }
+
+  .centerpiece-frame {
+    padding: 0.8rem;
+  }
+
+  .draw-section {
+    min-height: 0;
+    padding: 0.9rem 0.55rem 0.8rem;
+  }
+
+  .tarot-card {
+    width: 220px;
+    height: 308px;
+  }
+
+  .card-display__meta {
+    min-height: 4.6rem;
+    padding: 0.8rem 0.9rem 0.1rem;
+  }
+
+  .card-name {
+    font-size: 1.7rem;
+  }
+
+  .history-item {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+}
+</style>

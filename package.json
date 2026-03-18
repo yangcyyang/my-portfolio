@@ -4,9 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:obsidian": "node scripts/dev-obsidian.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "sync": "node scripts/sync-content.mjs",
     "sync:murmurs": "node scripts/sync-murmurs.mjs"
   },
   "dependencies": {

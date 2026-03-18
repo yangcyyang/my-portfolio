@@ -1,0 +1,254 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const resumeEntries = await getCollection('resume');
+const resume = resumeEntries[0]?.data;
+const resumeDownloadHref = '/files/resume/chen-yang-ai-product-15626239460.pdf';
+const resumeDownloadFilename = 'chen-yang-ai-product-15626239460.pdf';
+const projects = await getCollection('projects');
+const projectTitleByHref = new Map(
+  projects.map((project) => [`/portfolio/${project.id.replace(/\.md$/, '')}`, project.data.title]),
+);
+
+function normalizePoint(point: string | { text: string; period?: string; level?: number }) {
+  if (typeof point !== 'string') {
+    return {
+      text: point.text.trim(),
+      period: point.period?.trim() || null,
+      level: point.level ?? 1,
+    };
+  }
+
+  const match = point.match(/^(.*?)(?:\s+)(\d{4}\.\d{2}(?:-(?:\d{4}\.\d{2}|至今)))\s*$/);
+
+  if (!match) {
+    return { text: point.trim(), period: null, level: 1 };
+  }
+
+  return {
+    text: match[1].trim(),
+    period: match[2].trim(),
+    level: 1,
+  };
+}
+
+function splitPointLabel(text: string) {
+  const match = text.match(/^([【\[].+?[】\]])\s*(.+)$/);
+
+  if (!match) {
+    return { label: null, body: text };
+  }
+
+  return {
+    label: match[1].trim(),
+    body: match[2].trim(),
+  };
+}
+
+function normalizeProjectHighlight(item: string | { label: string; href: string }) {
+  if (typeof item === 'string') {
+    const value = item.trim();
+    if (value.startsWith('/portfolio/')) {
+      return { label: null, href: value };
+    }
+    return { label: value, href: null };
+  }
+
+  return {
+    label: item.label.trim(),
+    href: item.href.trim(),
+  };
+}
+
+function parseInlineBold(text: string) {
+  return text
+    .split(/(\*\*[^*]+\*\*)/g)
+    .filter(Boolean)
+    .map((segment) => ({
+      text: segment.replace(/^\*\*|\*\*$/g, ''),
+      bold: segment.startsWith('**') && segment.endsWith('**'),
+    }));
+}
+---
+
+<BaseLayout title={`${resume?.name ?? '个人'}｜个人履历`} description="一页式个人履历">
+  <section class="border-b border-slate-800/50 bg-gradient-to-b from-slate-900/40 to-transparent">
+    <div class="mx-auto max-w-5xl px-6 py-14">
+      <p class="mb-2 text-sm font-medium uppercase tracking-widest text-violet-400">Resume</p>
+      <div class="mb-3 flex flex-wrap items-center gap-3 md:gap-4">
+        <h1 class="text-3xl font-bold text-slate-100 md:text-4xl">
+          {resume?.name ?? '姓名'} · 个人履历
+        </h1>
+        <a
+          href={resumeDownloadHref}
+          download={resumeDownloadFilename}
+          class="inline-flex items-center rounded-full border border-violet-400/40 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-100 transition-colors hover:border-violet-300 hover:bg-violet-500/15 hover:text-white"
+        >
+          下载简历
+        </a>
+      </div>
+      <p class="max-w-3xl text-slate-400">{resume?.title ?? '个人职业简介'}</p>
+      <div class="mt-5 flex flex-wrap gap-2 text-sm text-slate-400">
+        <span class="rounded-full border border-slate-700 px-3 py-1">📍 {resume?.location ?? '-'}</span>
+        {resume?.age && <span class="rounded-full border border-slate-700 px-3 py-1">🎂 {resume.age}</span>}
+        <a href={`tel:${resume?.phone ?? ''}`} class="rounded-full border border-slate-700 px-3 py-1 hover:border-slate-500 hover:text-slate-200 transition-colors">
+          📞 {resume?.phone ?? '-'}
+        </a>
+        <a href={`mailto:${resume?.email ?? ''}`} class="rounded-full border border-slate-700 px-3 py-1 hover:border-slate-500 hover:text-slate-200 transition-colors">
+          ✉️ {resume?.email ?? '-'}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-6 py-10 lg:grid-cols-3">
+    <aside class="space-y-8 lg:col-span-1">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
+        <h2 class="mb-3 text-base font-semibold text-slate-100">个人简介</h2>
+        <ul class="space-y-2.5 text-sm text-slate-400">
+          {(resume?.summary ?? []).map((item) => (
+            <li class="flex items-start gap-2">
+              <span class="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-violet-400"></span>
+              <span>
+                {parseInlineBold(item).map((segment) =>
+                  segment.bold ? <strong class="font-semibold text-slate-200">{segment.text}</strong> : segment.text
+                )}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
+        <h2 class="mb-3 text-base font-semibold text-slate-100">教育背景</h2>
+        <div class="space-y-3">
+          {(resume?.education ?? []).map((edu) => (
+            <div class="rounded-lg border border-slate-800 bg-slate-900/50 p-3">
+              <p class="font-medium text-slate-200">{edu.school}</p>
+              <p class="text-sm text-slate-400">{edu.major} · {edu.degree}</p>
+              <p class="text-xs text-slate-500">{edu.period}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
+        <h2 class="mb-3 text-base font-semibold text-slate-100">过往项目复盘</h2>
+        <ul class="grid grid-cols-1 gap-2">
+          {(resume?.projectHighlights ?? []).map((item) => {
+            const project = normalizeProjectHighlight(item);
+            const projectTitle = project.href ? projectTitleByHref.get(project.href) : null;
+            const displayLabel = projectTitle ?? project.label ?? project.href;
+
+            return (
+              <li>
+                {project.href ? (
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="group flex items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-300 transition-colors hover:border-violet-400/40 hover:text-slate-100"
+                  >
+                    <span class="min-w-0 flex-1">{displayLabel}</span>
+                    <span
+                      aria-hidden="true"
+                      class="text-base leading-none text-violet-300/75 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-violet-200"
+                    >
+                      →
+                    </span>
+                  </a>
+                ) : (
+                  <div class="flex items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-300">
+                    <span class="min-w-0 flex-1">{displayLabel}</span>
+                    <span aria-hidden="true" class="text-base leading-none text-slate-600">
+                      →
+                    </span>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
+        <h2 class="mb-3 text-base font-semibold text-slate-100">能力标签</h2>
+        <div class="flex flex-wrap gap-2">
+          {(resume?.skills ?? []).map((skill) => (
+            <span class="rounded-md bg-slate-800 px-2.5 py-1 text-xs text-slate-300">{skill}</span>
+          ))}
+        </div>
+      </div>
+    </aside>
+
+    <main class="space-y-8 lg:col-span-2">
+      <div>
+        <h2 class="mb-4 text-xl font-semibold text-slate-100">工作经历</h2>
+        <div class="space-y-4">
+          {(resume?.experiences ?? []).map((exp) => (
+            <article class="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
+              <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 class="text-base font-semibold text-slate-100">{exp.company}</h3>
+                  <p class="text-sm text-violet-300">{exp.role}</p>
+                </div>
+                <span class="rounded-full bg-slate-800 px-2.5 py-1 text-xs text-slate-300">{exp.period}</span>
+              </div>
+              <ul class="space-y-2 text-sm text-slate-400">
+                {exp.points.map((point) => {
+                  const item = normalizePoint(point);
+                  const content = splitPointLabel(item.text);
+
+                  return (
+                    <li class:list={[
+                      'flex items-start gap-2 sm:gap-4',
+                      item.level > 1 && 'ml-5 sm:ml-8',
+                    ]}>
+                      <span class:list={[
+                        'mt-1.5 flex-shrink-0 rounded-full bg-violet-400',
+                        item.level > 1 ? 'h-1.5 w-1.5 bg-violet-300/80' : 'h-1.5 w-1.5',
+                      ]}></span>
+                      <div class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+                        <div class:list={[
+                          'min-w-0 flex-1 leading-relaxed',
+                          item.level > 1 && 'text-slate-500',
+                        ]}>
+                          {content.label ? (
+                            <span>
+                              <span class="font-medium text-slate-300">
+                                {parseInlineBold(content.label).map((segment) =>
+                                  segment.bold ? <strong class="font-semibold text-slate-100">{segment.text}</strong> : segment.text
+                                )}
+                              </span>{' '}
+                              <span>
+                                {parseInlineBold(content.body).map((segment) =>
+                                  segment.bold ? <strong class="font-semibold text-slate-200">{segment.text}</strong> : segment.text
+                                )}
+                              </span>
+                            </span>
+                          ) : (
+                            <span>
+                              {parseInlineBold(item.text).map((segment) =>
+                                segment.bold ? <strong class="font-semibold text-slate-200">{segment.text}</strong> : segment.text
+                              )}
+                            </span>
+                          )}
+                        </div>
+                        {item.period && (
+                          <span class="whitespace-nowrap text-left text-slate-500 sm:min-w-[9rem] sm:text-right">
+                            {item.period}
+                          </span>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </main>
+  </section>
+</BaseLayout>

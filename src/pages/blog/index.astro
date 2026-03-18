@@ -68,9 +68,12 @@ function formatDate(date: Date) {
                 </p>
 
                 <!-- Read more -->
-                <div class="mt-4 text-sm font-medium text-violet-400 group-hover:text-violet-300 transition-colors">
+                <a
+                  href={`/blog/${slug}`}
+                  class="mt-4 inline-flex text-sm font-medium text-violet-400 transition-colors hover:text-violet-300"
+                >
                   阅读全文 →
-                </div>
+                </a>
               </article>
             );
           })}
