@@ -70,6 +70,10 @@ function parseInlineBold(text: string) {
       bold: segment.startsWith('**') && segment.endsWith('**'),
     }));
 }
+
+function isNumberedSectionHeading(text: string) {
+  return /^\*\*\d{2}\s/.test(text.trim());
+}
 ---
 
 <BaseLayout title={`${resume?.name ?? '个人'}｜个人履历`} description="一页式个人履历">
@@ -199,20 +203,25 @@ function parseInlineBold(text: string) {
                 {exp.points.map((point) => {
                   const item = normalizePoint(point);
                   const content = splitPointLabel(item.text);
+                  const isSectionHeading = item.level > 1 && isNumberedSectionHeading(item.text);
 
                   return (
                     <li class:list={[
                       'flex items-start gap-2 sm:gap-4',
-                      item.level > 1 && 'ml-5 sm:ml-8',
+                      item.level > 1 && !isSectionHeading && 'ml-5 sm:ml-8',
                     ]}>
-                      <span class:list={[
-                        'mt-1.5 flex-shrink-0 rounded-full bg-violet-400',
-                        item.level > 1 ? 'h-1.5 w-1.5 bg-violet-300/80' : 'h-1.5 w-1.5',
-                      ]}></span>
+                      {isSectionHeading ? (
+                        <span class="w-0 flex-shrink-0" aria-hidden="true"></span>
+                      ) : (
+                        <span class:list={[
+                          'mt-1.5 flex-shrink-0 rounded-full bg-violet-400',
+                          item.level > 1 ? 'h-1.5 w-1.5 bg-violet-300/80' : 'h-1.5 w-1.5',
+                        ]}></span>
+                      )}
                       <div class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
                         <div class:list={[
                           'min-w-0 flex-1 leading-relaxed',
-                          item.level > 1 && 'text-slate-500',
+                          item.level > 1 && !isSectionHeading && 'text-slate-500',
                         ]}>
                           {content.label ? (
                             <span>

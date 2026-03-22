@@ -16,23 +16,35 @@ summary:
   - 熟悉设计规范建设与多工具协同，能结合 Claude、Dify、OpenClaw、Codex 等工具推进产品方案验证。
 experiences:
   - company: AI 产品设计师（自由职业）
-    role: AI 探索 / 电商 / 游戏
-    period: 2024.06 - 至今
+    role: AI探索 / 游戏 / 电商
+    period: 2024/06-至今
     points:
-      - text: AI产品经理——广东省药品监督管理局：完成**药品与医疗器械广告 AI 辅助受理审查方案**，有效降低人工审核成本
-        period: 2025.10-至今
-      - text: 对项目业务与用户诉求进行梳理，提炼角色核心痛点并明确角色画像
+      - text: AI产品经理——广东省药品监督管理局
+        period: 2025/10-至今
+      - text: "**01 药品与医疗器械广告AI 辅助受理审查方案，有效降低人工审核成本**"
         level: 2
-      - text: 基于法律法规与业务条件对 AI 边界进行划分，量化 6 项可测量验收标准
+      - text: 对项目业务与用户诉求梳理，梳理角色核心痛点以及确定角色画像
         level: 2
-      - text: 参与前沿治理工作，覆盖标准制定、数据接入与清洗、多模态识别等方向
+      - text: 基于法律法规与业务条件，对AI边界进行划分，量化6项可测量验收标准
         level: 2
-      - text: 负责梳理规则库、基于法律法规库构建 RAG 检索能力，沉淀广告受理工作流
+      - text: 参与前沿准备工作（标准划定、数据接入&清洗、多模态识别）
         level: 2
-      - text: 游戏 UI 策划——光子广州基地：策划多项金铲铲S15/S16赛季主题活动,总结**10项常规活动模版/1套标准化活动流程，助力新人快速上手**
-        period: 2025.06-2025.10
+      - text: 负责建设规则库&法律法规库，构建RAG检索&广告受理方案工作流
+        level: 2
+      - text: "**02 粤小药，有效降低人工审核成本**"
+        level: 2
+      - text: 搭建政务领域多轮对话式智能客服，提供两品一械咨询、办事指南、投诉举报分流等在线服务
+        level: 2
+      - text: 基于业务背景与痛点，确定产品定位与整体结构
+        level: 2
+      - text: 基于设计问题改写体系，并给予业务规则建立意图分类，输出结构化回复
+        level: 2
+      - text: 对6大知识库进行RAG检索，对安全与合规设计标准进行梳理
+        level: 2
+      - text: 游戏UX策划——光子广州基地中心：策划多项金铲铲S15/S16赛季主题活动,**总结10项常规活动模版/1套标准化活动流程，助力新人快速上手**
+        period: 2025/06-2025/10
       - text: 电商运营——自主搭建经营自家店铺：**搭建运营两家电商与维护内容账号，实现年收入店铺均 7w+**，验证产品-内容-转化全链路能力
-        period: 2024.06-2025.04
+        period: 2024/06-2025/04
   - company: 数字广东网络建设有限公司
     role: 产品交互设计师
     period: 2021.10 - 2024.05
@@ -83,12 +95,13 @@ experiences:
         level: 2
 projectHighlights:
   - /portfolio/10-drug-ad-ai-review
+  - /portfolio/11-yuexiao-yao
   - /portfolio/01-gsd-design-system
   - /portfolio/02-city-command-dashboard
   - /portfolio/03-village-accessibility
   - /portfolio/04-tft-analysis
-  - /portfolio/05-openclaw-workflow
   - /portfolio/06-arknights-analysis
+  - /portfolio/05-openclaw-workflow
   - /portfolio/07-city-command-platform-p7-draft
   - /portfolio/08-city-command-platform-p8-draft
   - /portfolio/09-tft-breakdown-analysis

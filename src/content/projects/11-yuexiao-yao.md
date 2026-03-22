@@ -2,8 +2,8 @@
 title: 粤小药——药监智能客服与知识服务方案
 category: AI项目
 description: 面向广东省药监局在线服务场景，整合咨询投诉、办事指南与政策法规问答，梳理粤小药智能客服的业务入口与知识服务体验。
-cover: /images/portfolio/project-11-assets/00.webp
-heroBackground: /images/portfolio/project-11-assets/00.webp
+cover: /images/portfolio/project-11-assets/hero-generated.webp
+heroBackground: /images/portfolio/project-11-assets/hero-generated.webp
 tags:
   - 药监
   - 智能客服
