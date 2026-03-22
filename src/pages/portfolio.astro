@@ -77,7 +77,7 @@ const categories = ['全部', ...Array.from(new Set(projects.map((p) => p.catego
                 >
                   {project.category}
                 </span>
-                {project.status !== '进行中' && (
+                {!project.hideStatus && project.status !== '进行中' && (
                   <span
                     class:list={[
                       'rounded-full px-2.5 py-0.5 text-xs',

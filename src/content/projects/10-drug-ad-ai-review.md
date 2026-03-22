@@ -1,6 +1,6 @@
 ---
 title: 药监 AI 广告审查——智能受理方案
-category: 产品UX设计
+category: AI项目
 description: 面向药监广告审查场景，整理 AI 辅助受理流程与界面表达，提升审查效率与信息清晰度。
 cover: /images/portfolio/project-10-assets/00.webp
 heroBackground: /images/portfolio/project-10-assets/hero-generated.png
@@ -31,3 +31,8 @@ featured: true
 ![药监 AI 广告审查 08](/images/portfolio/project-10-assets/07.webp)
 ![药监 AI 广告审查 09](/images/portfolio/project-10-assets/08.webp)
 ![药监 AI 广告审查 10](/images/portfolio/project-10-assets/09.webp)
+![药监 AI 广告审查 11](/images/portfolio/project-10-assets/10.webp)
+![药监 AI 广告审查 12](/images/portfolio/project-10-assets/11.webp)
+![药监 AI 广告审查 13](/images/portfolio/project-10-assets/12.webp)
+![药监 AI 广告审查 14](/images/portfolio/project-10-assets/13.webp)
+![药监 AI 广告审查 15](/images/portfolio/project-10-assets/14.webp)

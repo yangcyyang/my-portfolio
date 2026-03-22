@@ -11,7 +11,7 @@ hideStatus: true
 status: 已完成
 highlights:
   - 记录一次完整抽奖活动，用于参考学习
-order: 8
+order: 9
 featured: false
 ---
 

@@ -14,7 +14,7 @@ highlights:
   - 拆解产品需求，确定主业务流程
   - 快速绘制低保真原型，快速验证客户需求
   - 根据客户需求，细化高保真原型
-order: 5
+order: 6
 featured: true
 ---
 
@@ -33,4 +33,3 @@ featured: true
 ![项目 06 展示图 07](/images/portfolio/project-06-assets/7.webp)
 ![项目 06 展示图 08](/images/portfolio/project-06-assets/8.webp)
 ![项目 06 展示图 09](/images/portfolio/project-06-assets/9.webp)
-

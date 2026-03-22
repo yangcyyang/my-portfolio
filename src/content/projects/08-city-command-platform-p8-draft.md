@@ -12,7 +12,7 @@ status: 已完成
 highlights:
   - 基于活动目标划分 10 种模板
   - 一份完整 UX 活动设计流程，供新手学习
-order: 9
+order: 10
 featured: false
 ---
 
