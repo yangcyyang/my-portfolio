@@ -81,7 +81,6 @@ experiences:
     points:
       - text: 负责村福通（适老化）小程序+PC端产品交互设计
       - text: 制定政务适老化规范、政务小程序规范V1.0 及公有组件规范
-        level: 2
   - company: AI 产品探索（自由职业）
     role: AI探索 / 游戏 UX / 电商运营
     period: 2024/06-2025/06
@@ -93,8 +92,6 @@ projectHighlights:
   - /portfolio/01-gsd-design-system
   - /portfolio/02-city-command-dashboard
   - /portfolio/03-village-accessibility
-  - /portfolio/04-tft-analysis
-  - /portfolio/06-arknights-analysis
   - /portfolio/05-openclaw-workflow
   - /portfolio/07-city-command-platform-p7-draft
   - /portfolio/08-city-command-platform-p8-draft
