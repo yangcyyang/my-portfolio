@@ -47,11 +47,6 @@ experiences:
         level: 2
       - text: "设计目标：响应时间20min→≤3min（-85%）；法规分类准确率≥90%，投诉举报7级精准分流；7×24h无人值守在线服务"
         level: 2
-  - company: AI 产品探索（自由职业）
-    role: AI探索 / 游戏 UX / 电商运营
-    period: 2024/06-2025/06
-    points:
-      - text: 2024年转型自由职业，探索 AI 产品方向，期间完成游戏 UX 实践与电商全链路验证，2025年落地药监局项目（AI场景应用）。
   - company: 数字广东网络建设有限公司
     role: 产品交互设计师
     period: 2021/10 - 2024/05
@@ -87,6 +82,11 @@ experiences:
       - text: 负责村福通（适老化）小程序+PC端产品交互设计
       - text: 制定政务适老化规范、政务小程序规范V1.0 及公有组件规范
         level: 2
+  - company: AI 产品探索（自由职业）
+    role: AI探索 / 游戏 UX / 电商运营
+    period: 2024/06-2025/06
+    points:
+      - text: 2024年转型自由职业，探索 AI 产品方向，期间完成游戏 UX 实践与电商全链路验证，2025年落地药监局项目（AI场景应用）。
 projectHighlights:
   - /portfolio/10-drug-ad-ai-review
   - /portfolio/11-yuexiao-yao
