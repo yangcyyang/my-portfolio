@@ -74,6 +74,10 @@ function parseInlineBold(text: string) {
 function isNumberedSectionHeading(text: string) {
   return /^\*\*\d{2}\s/.test(text.trim());
 }
+
+function isContextLine(text: string) {
+  return /^(背景：|目标：|设计目标：|结果：)/.test(text.trim());
+}
 ---
 
 <BaseLayout title={`${resume?.name ?? '个人'}｜个人履历`} description="一页式个人履历">
@@ -204,13 +208,14 @@ function isNumberedSectionHeading(text: string) {
                   const item = normalizePoint(point);
                   const content = splitPointLabel(item.text);
                   const isSectionHeading = item.level > 1 && isNumberedSectionHeading(item.text);
+                  const isContext = isContextLine(item.text);
 
                   return (
                     <li class:list={[
                       'flex items-start gap-2 sm:gap-4',
                       item.level > 1 && !isSectionHeading && 'ml-5 sm:ml-8',
                     ]}>
-                      {isSectionHeading ? (
+                      {isSectionHeading || isContext ? (
                         <span class="w-0 flex-shrink-0" aria-hidden="true"></span>
                       ) : (
                         <span class:list={[
